@@ -1229,8 +1229,6 @@ export default function App() {
           {/* Step 2 / File Intake */}
           <DropZone
             onFilesAdded={handleFilesAdded}
-            onLoadSampleBatch={handleLoadSampleBatch}
-            isLoadingSamples={isLoadingSamples}
             showTextComposer={activeTool === 'word-to-pdf'}
             onAddTextDocument={handleAddTextDocument}
             compact={items.length > 0}

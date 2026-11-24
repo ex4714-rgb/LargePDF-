@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react';
-import { FolderUp, FolderOpen, Files, Plus, PenLine } from 'lucide-react';
+import { FolderUp, FolderOpen, Plus, PenLine } from 'lucide-react';
 import type { TranslationDict } from '../i18n/translations';
 
 interface DropZoneProps {
   onFilesAdded: (files: FileList | File[]) => void;
-  onLoadSampleBatch: () => void;
-  isLoadingSamples: boolean;
+  onLoadSampleBatch?: () => void;
+  isLoadingSamples?: boolean;
   showTextComposer: boolean;
   onAddTextDocument: (title: string, body: string) => void;
   compact?: boolean;
@@ -14,8 +14,6 @@ interface DropZoneProps {
 
 export const DropZone: React.FC<DropZoneProps> = ({
   onFilesAdded,
-  onLoadSampleBatch,
-  isLoadingSamples,
   showTextComposer,
   onAddTextDocument,
   compact = false,
@@ -99,16 +97,6 @@ export const DropZone: React.FC<DropZoneProps> = ({
             >
               <FolderOpen className="w-4 h-4" aria-hidden="true" />
               <span>{t.chooseFiles}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={onLoadSampleBatch}
-              disabled={isLoadingSamples}
-              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-zinc-800 dark:text-[#e6edf0] bg-[#eef2f1] dark:bg-[#222b31] hover:bg-[#e2e9e7] dark:hover:bg-[#2a353d] border border-[#cfd9d6] dark:border-[#32404a] rounded-lg transition-colors whitespace-nowrap shrink-0 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
-            >
-              <Files className="w-4 h-4 text-sky-600 dark:text-sky-400" aria-hidden="true" />
-              <span>{isLoadingSamples ? t.creatingSamples : t.trySampleFiles}</span>
             </button>
           </div>
         </div>
