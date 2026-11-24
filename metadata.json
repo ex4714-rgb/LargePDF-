@@ -1,0 +1,6 @@
+{
+  "name": "BoltPDF",
+  "description": "Private, browser-native PDF and document studio with high-ratio file compression, batch processing, and instant format conversion.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
