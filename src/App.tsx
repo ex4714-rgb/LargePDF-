@@ -1,13 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ShieldCheck,
-  Minimize2,
-  FolderArchive,
   Lock,
   HelpCircle,
   X,
   Infinity as InfinityIcon,
 } from 'lucide-react';
+import { buildDynamicGuideCards, type GuideCardItem } from './utils/toolImages';
 import { TopBar } from './components/TopBar';
 import {
   TOOL_ICONS,
@@ -87,15 +86,6 @@ import {
   type LanguagePreference,
 } from './i18n/translations';
 
-interface GuideCardData {
-  id: string;
-  stepNum: string;
-  imageSrc: string;
-  title: string;
-  desc: string;
-  icon: React.ComponentType<{ className?: string }>;
-  iconColor: string;
-}
 
 function GuideIllustration({
   src,
@@ -1025,35 +1015,10 @@ export default function App() {
     [t, activeTool, items.length]
   );
 
-  const guideCards: GuideCardData[] = [
-    {
-      id: 'shrink',
-      stepNum: '1.',
-      imageSrc: '/src/assets/images/photo_shrink_docs_1795535942681.jpg',
-      title: t.guide1Title,
-      desc: t.guide1Desc,
-      icon: Minimize2,
-      iconColor: 'text-teal-600 dark:text-teal-400',
-    },
-    {
-      id: 'batch',
-      stepNum: '2.',
-      imageSrc: '/src/assets/images/photo_batch_folder_1795535942538.jpg',
-      title: t.guide2Title,
-      desc: t.guide2Desc,
-      icon: FolderArchive,
-      iconColor: 'text-amber-600 dark:text-amber-400',
-    },
-    {
-      id: 'private',
-      stepNum: '3.',
-      imageSrc: '/src/assets/images/photo_private_desk_1795535943425.jpg',
-      title: t.guide3Title,
-      desc: t.guide3Desc,
-      icon: ShieldCheck,
-      iconColor: 'text-emerald-600 dark:text-emerald-400',
-    },
-  ];
+  const guideCards = useMemo(
+    () => buildDynamicGuideCards(activeTool, t),
+    [activeTool, t]
+  );
 
   return (
     <div
