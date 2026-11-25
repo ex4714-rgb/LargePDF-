@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LargePDF by xCC — 100% Private, Uncapped Browser PDF Studio</title>
+  <meta name="description" content="Process multi-gigabyte PDFs, batch-compress documents, convert formats, and sign contracts directly inside your web browser. 100% client-side WebAssembly, zero cloud uploads, zero limits.">
+  <meta name="theme-color" content="#090d16">
+  
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="LargePDF by xCC — 100% Private, Uncapped Browser PDF Studio">
+  <meta property="og:description" content="21 Pro-grade PDF tools running natively in your browser. Zero server uploads. No file size limits. 100% private.">
+  <meta property="og:image" content="./images/photo_shrink_docs_1795535942681.jpg">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
+              accent: '#00dc82',
+            },
+            dark: {
+              base: '#090d16',
+              surface: '#0f1524',
+              elevated: '#151d32',
+              border: 'rgba(255, 255, 255, 0.08)',
+              borderHover: 'rgba(255, 255, 255, 0.16)',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom refined styling */
+    body {
+      background-color: #090d16;
+      color: #e2e8f0;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      overflow-x: hidden;
+      selection-background-color: #00dc82;
+      selection-color: #090d16;
+    }
+
+    ::selection {
+      background: #00dc82;
+      color: #090d16;
+    }
+
+    /* Ambient background mesh */
+    .bg-ambient {
+      background-image: 
+        radial-gradient(at 15% 15%, rgba(0, 220, 130, 0.08) 0px, transparent 55%),
+        radial-gradient(at 85% 25%, rgba(56, 189, 248, 0.07) 0px, transparent 50%),
+        radial-gradient(at 50% 75%, rgba(16, 185, 129, 0.05) 0px, transparent 60%);
+    }
+
+    /* Glass card utility */
+    .glass-card {
+      background: rgba(15, 21, 36, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-card:hover {
+      border-color: rgba(0, 220, 130, 0.25);
+      box-shadow: 0 10px 30px -10px rgba(0, 220, 130, 0.08);
+    }
+
+    /* Subtle grid pattern */
+    .grid-pattern {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    }
+
+    /* Smooth glow */
+    .glow-brand {
+      box-shadow: 0 0 25px -4px rgba(0, 220, 130, 0.35);
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090d16;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+  </style>
+</head>
+<body class="bg-[#090d16] text-zinc-100 antialiased min-h-screen relative bg-ambient grid-pattern">
+
+  <!-- ========================================================================= -->
+  <!-- TOP NAVIGATION BAR -->
+  <!-- ========================================================================= -->
+  <header class="sticky top-0 z-50 w-full backdrop-blur-xl bg-[#090d16]/80 border-b border-white/[0.08] transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-3.5 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-zinc-950 shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+          <!-- Document Layers Icon -->
+          <svg class="w-5 h-5 text-zinc-950 font-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-display font-bold text-xl tracking-tight text-white flex items-center gap-2">
+            LargePDF
+            <span class="text-[10px] font-medium tracking-wider uppercase px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">WASM</span>
+          </span>
+          <span class="text-[11px] font-medium text-zinc-400 tracking-wide">by xCC</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-300">
+        <a href="#features" class="hover:text-emerald-400 transition-colors">Features</a>
+        <a href="#tools" class="hover:text-emerald-400 transition-colors">21 Tools Suite</a>
+        <a href="#architecture" class="hover:text-emerald-400 transition-colors">Privacy Architecture</a>
+        <a href="#comparison" class="hover:text-emerald-400 transition-colors">Comparison</a>
+        <a href="#faq" class="hover:text-emerald-400 transition-colors">FAQ</a>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="hidden sm:flex items-center gap-3">
+        <!-- Download ZIP button -->
+        <a href="./largepdf-showcase.zip" download="largepdf-showcase.zip" class="px-3.5 py-2 rounded-lg text-xs font-semibold text-zinc-300 hover:text-white bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 transition-all flex items-center gap-2" title="Download standalone showcase bundle">
+          <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          Showcase ZIP
+        </a>
+
+        <!-- Launch Live App -->
+        <a href="https://largepdf-zh8v.onrender.com" target="_blank" rel="noopener noreferrer" class="px-5 py-2 rounded-lg text-xs font-bold text-zinc-950 bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 glow-brand transition-all flex items-center gap-2">
+          Launch App Studio
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </a>
+      </div>
+
+      <!-- Mobile Hamburger Toggle -->
+      <button id="mobileMenuBtn" aria-label="Toggle menu" class="md:hidden p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.05]">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileDrawer" class="hidden md:hidden px-4 pt-3 pb-6 border-b border-white/[0.08] bg-[#090d16]/95 backdrop-blur-2xl">
+      <div class="flex flex-col gap-3 text-sm font-medium text-zinc-300">
+        <a href="#features" class="py-2 hover:text-emerald-400">Features</a>
+        <a href="#tools" class="py-2 hover:text-emerald-400">21 Tools Suite</a>
+        <a href="#architecture" class="py-2 hover:text-emerald-400">Privacy Architecture</a>
+        <a href="#comparison" class="py-2 hover:text-emerald-400">Comparison</a>
+        <a href="#faq" class="py-2 hover:text-emerald-400">FAQ</a>
+        <div class="pt-4 border-t border-white/[0.08] flex flex-col gap-2.5">
+          <a href="./largepdf-showcase.zip" download class="w-full text-center py-2.5 rounded-lg text-xs font-semibold bg-white/[0.05] border border-white/10 text-white">
+            Download Showcase (.zip)
+          </a>
+          <a href="https://largepdf-zh8v.onrender.com" target="_blank" class="w-full text-center py-2.5 rounded-lg text-xs font-bold text-zinc-950 bg-emerald-400">
+            Launch App Studio
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- HERO SECTION -->
+  <!-- ========================================================================= -->
+  <section class="relative pt-16 pb-20 sm:pt-24 sm:pb-32 overflow-hidden">
+    <!-- Ambient Radial Light -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[720px] h-[360px] bg-emerald-500/10 blur-[130px] rounded-full pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      
+      <!-- Top Announcement Badge -->
+      <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-300 text-xs font-semibold mb-8 backdrop-blur-md">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>LargePDF by xCC &bull; 100% In-Browser Local Processing &bull; Zero Server Uploads</span>
+      </div>
+
+      <!-- Main Title -->
+      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-display font-extrabold tracking-tight text-white max-w-5xl mx-auto leading-[1.08]">
+        The Private, Uncapped PDF Studio.<br>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-sky-400">
+          Directly in Your Browser.
+        </span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="mt-6 sm:mt-8 text-base sm:text-xl text-zinc-300 max-w-3xl mx-auto font-normal leading-relaxed">
+        Eliminate file size caps, subscription paywalls, and confidential data leaks. LargePDF processes gigabyte-scale documents, batch-compresses files, converts Word, and seals signatures locally on your CPU using browser-native WebAssembly.
+      </p>
+
+      <!-- Hero Call-to-Actions -->
+      <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <a href="https://largepdf-zh8v.onrender.com" target="_blank" rel="noopener noreferrer" class="px-7 py-3.5 rounded-xl text-sm font-bold text-zinc-950 bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-400 hover:brightness-110 shadow-xl shadow-emerald-500/20 transition-all flex items-center gap-3">
+          <span>Launch LargePDF Studio</span>
+          <svg class="w-4 h-4 font-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </a>
+
+        <a href="#tools" class="px-6 py-3.5 rounded-xl text-sm font-semibold text-zinc-200 hover:text-white bg-white/[0.05] hover:bg-white/[0.1] border border-white/15 transition-all">
+          Explore All 21 Tools
+        </a>
+
+        <a href="./largepdf-showcase.zip" download="largepdf-showcase.zip" class="px-5 py-3.5 rounded-xl text-sm font-medium text-emerald-400 hover:text-emerald-300 bg-emerald-500/[0.06] hover:bg-emerald-500/[0.12] border border-emerald-500/20 transition-all flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          Get Showcase (.zip)
+        </a>
+      </div>
+
+      <!-- Four Core Trust Pillars -->
+      <div class="mt-16 sm:mt-20 grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto text-left">
+        
+        <div class="glass-card p-4 sm:p-5 rounded-2xl">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-3">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+          </div>
+          <h2 class="text-sm font-bold text-white">0% Server Upload</h2>
+          <p class="mt-1 text-xs text-zinc-400">Zero network bytes. Files are processed entirely in browser RAM.</p>
+        </div>
+
+        <div class="glass-card p-4 sm:p-5 rounded-2xl">
+          <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center mb-3">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <h2 class="text-sm font-bold text-white">No File Size Caps</h2>
+          <p class="mt-1 text-xs text-zinc-400">Handles 500MB+, 2000-page archives and large batch folders effortlessly.</p>
+        </div>
+
+        <div class="glass-card p-4 sm:p-5 rounded-2xl">
+          <div class="w-8 h-8 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center mb-3">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+          </div>
+          <h2 class="text-sm font-bold text-white">21 Pro-Grade Tools</h2>
+          <p class="mt-1 text-xs text-zinc-400">Compress, merge, convert, OCR, sign, watermark, crop, flatten & protect.</p>
+        </div>
+
+        <div class="glass-card p-4 sm:p-5 rounded-2xl">
+          <div class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center mb-3">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <h2 class="text-sm font-bold text-white">GDPR & HIPAA Native</h2>
+          <p class="mt-1 text-xs text-zinc-400">Zero data retention by design. Perfect for legal, financial & medical docs.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- INTERACTIVE FEATURE SHOWCASE WITH TABS -->
+  <!-- ========================================================================= -->
+  <section id="features" class="py-20 border-t border-white/[0.08] relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 px-3 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20">
+          Interactive Product Showcase
+        </span>
+        <h2 class="mt-3 text-3xl sm:text-4xl font-display font-extrabold text-white">
+          Engineered for Heavyweight Document Workflows
+        </h2>
+        <p class="mt-3 text-zinc-400 text-sm sm:text-base">
+          Click any workflow below to see how LargePDF redefines document productivity without cloud compromises.
+        </p>
+      </div>
+
+      <!-- Feature Interactive Tabs -->
+      <div class="flex flex-wrap items-center justify-center gap-2 mb-10 max-w-4xl mx-auto">
+        <button onclick="switchTab('compress')" id="tab-compress" class="feature-tab active px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all border bg-emerald-500/20 border-emerald-500 text-emerald-300">
+          Smart Compression
+        </button>
+        <button onclick="switchTab('merge')" id="tab-merge" class="feature-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all border bg-white/[0.04] border-white/10 text-zinc-300 hover:bg-white/[0.08]">
+          Merge & Split
+        </button>
+        <button onclick="switchTab('sign')" id="tab-sign" class="feature-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all border bg-white/[0.04] border-white/10 text-zinc-300 hover:bg-white/[0.08]">
+          Digital Sign & Flatten
+        </button>
+        <button onclick="switchTab('convert')" id="tab-convert" class="feature-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all border bg-white/[0.04] border-white/10 text-zinc-300 hover:bg-white/[0.08]">
+          Format Conversion
+        </button>
+        <button onclick="switchTab('privacy')" id="tab-privacy" class="feature-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all border bg-white/[0.04] border-white/10 text-zinc-300 hover:bg-white/[0.08]">
+          Privacy & Metadata
+        </button>
+      </div>
+
+      <!-- Tab Content Frame -->
+      <div class="glass-card rounded-3xl p-6 sm:p-10 border border-white/10 overflow-hidden relative">
+        <div id="featureContent" class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          <!-- Content is dynamically rendered by switchTab() -->
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- PRIVACY ARCHITECTURE & LIVE SIMULATION -->
+  <!-- ========================================================================= -->
+  <section id="architecture" class="py-20 border-t border-white/[0.08] bg-[#0c111d]/50 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-bold uppercase tracking-wider text-teal-400 px-3 py-1 rounded-md bg-teal-500/10 border border-teal-500/20">
+          Architectural Superiority
+        </span>
+        <h2 class="mt-3 text-3xl sm:text-4xl font-display font-extrabold text-white">
+          Why "100% Local" Changes Everything
+        </h2>
+        <p class="mt-3 text-zinc-400 text-sm sm:text-base">
+          Compare the hazardous cloud upload pipeline of traditional PDF services against LargePDF's zero-knowledge client engine.
+        </p>
+      </div>
+
+      <!-- Side-by-Side Comparison of Pipelines -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+        
+        <!-- Traditional Cloud Pipeline (Red/Warning) -->
+        <div class="p-6 sm:p-8 rounded-2xl bg-rose-950/20 border border-rose-500/20 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-6">
+              <span class="text-xs font-bold uppercase tracking-wider text-rose-400 px-2.5 py-1 rounded bg-rose-500/10 border border-rose-500/20">
+                Traditional Cloud PDF Websites
+              </span>
+              <span class="text-xs text-rose-400 font-semibold flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                High Risk Exposure
+              </span>
+            </div>
+            
+            <h3 class="text-xl font-bold text-white mb-4">Every Byte Leaves Your Computer</h3>
+            <p class="text-sm text-zinc-300 mb-6 leading-relaxed">
+              When you upload a tax return, contract, or medical document, it travels over public networks to remote web servers.
+            </p>
+
+            <!-- Flow Steps -->
+            <div class="space-y-4">
+              <div class="flex items-start gap-3 p-3 rounded-xl bg-black/30 border border-rose-500/10 text-xs">
+                <span class="w-5 h-5 rounded-full bg-rose-500/20 text-rose-300 flex items-center justify-center font-bold shrink-0">1</span>
+                <div>
+                  <div class="font-semibold text-zinc-200">Public Internet Transfer</div>
+                  <div class="text-zinc-400 mt-0.5">Your complete unencrypted document payload is uploaded to remote cloud buckets.</div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 p-3 rounded-xl bg-black/30 border border-rose-500/10 text-xs">
+                <span class="w-5 h-5 rounded-full bg-rose-500/20 text-rose-300 flex items-center justify-center font-bold shrink-0">2</span>
+                <div>
+                  <div class="font-semibold text-zinc-200">Server Disk Retention</div>
+                  <div class="text-zinc-400 mt-0.5">Files reside on third-party disks for hours or days, vulnerable to sub-processors and breaches.</div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 p-3 rounded-xl bg-black/30 border border-rose-500/10 text-xs">
+                <span class="w-5 h-5 rounded-full bg-rose-500/20 text-rose-300 flex items-center justify-center font-bold shrink-0">3</span>
+                <div>
+                  <div class="font-semibold text-zinc-200">Artificial Artificial Paywalls</div>
+                  <div class="text-zinc-400 mt-0.5">Arbitrary 25 MB file caps and queue throttling imposed to force expensive monthly subscriptions.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 pt-4 border-t border-rose-500/15 flex items-center justify-between text-xs text-rose-300">
+            <span>Server Upload: <strong>100% of bytes</strong></span>
+            <span>Privacy Compliance: <strong>Uncertain</strong></span>
+          </div>
+        </div>
+
+        <!-- LargePDF by xCC Local Pipeline (Emerald/Safe) -->
+        <div class="p-6 sm:p-8 rounded-2xl bg-emerald-950/20 border border-emerald-500/30 flex flex-col justify-between relative shadow-xl shadow-emerald-900/10">
+          <div>
+            <div class="flex items-center justify-between mb-6">
+              <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/20">
+                LargePDF by xCC Engine
+              </span>
+              <span class="text-xs text-emerald-400 font-semibold flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                Zero-Knowledge Isolated
+              </span>
+            </div>
+
+            <h3 class="text-xl font-bold text-white mb-4">Zero Outgoing Network Requests</h3>
+            <p class="text-sm text-zinc-300 mb-6 leading-relaxed">
+              LargePDF boots a sandboxed WebAssembly execution runtime inside your browser tab. All algorithms run directly against your device RAM and CPU.
+            </p>
+
+            <!-- Flow Steps -->
+            <div class="space-y-4">
+              <div class="flex items-start gap-3 p-3 rounded-xl bg-emerald-900/10 border border-emerald-500/20 text-xs">
+                <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold shrink-0">1</span>
+                <div>
+                  <div class="font-semibold text-emerald-300">Direct In-Memory FileReader</div>
+                  <div class="text-zinc-400 mt-0.5">Documents stream straight from your local hard drive into browser ArrayBuffers.</div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 p-3 rounded-xl bg-emerald-900/10 border border-emerald-500/20 text-xs">
+                <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold shrink-0">2</span>
+                <div>
+                  <div class="font-semibold text-emerald-300">Wasm & PDF-Lib Engine</div>
+                  <div class="text-zinc-400 mt-0.5">Native multi-threaded computation compresses, splits, renders and signs in milliseconds.</div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 p-3 rounded-xl bg-emerald-900/10 border border-emerald-500/20 text-xs">
+                <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold shrink-0">3</span>
+                <div>
+                  <div class="font-semibold text-emerald-300">Zero Cloud Footprint</div>
+                  <div class="text-zinc-400 mt-0.5">Outputs save directly to your Downloads folder. Nothing touches external storage.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 pt-4 border-t border-emerald-500/20 flex items-center justify-between text-xs text-emerald-300">
+            <span>Server Upload: <strong>0.00 KB</strong></span>
+            <span>GDPR/HIPAA Compliance: <strong>Guaranteed by Design</strong></span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Live Network Inspector Simulator Widget -->
+      <div class="mt-12 glass-card rounded-2xl p-6 sm:p-8 border border-white/10 max-w-4xl mx-auto">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
+          <div>
+            <h4 class="text-base font-bold text-white flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+              Live Network Telemetry Simulator
+            </h4>
+            <p class="text-xs text-zinc-400 mt-1">Test how LargePDF handles a 150 MB confidential bank ledger file.</p>
+          </div>
+          <button id="runSimBtn" onclick="runNetworkSimulation()" class="px-4 py-2 rounded-lg text-xs font-bold text-zinc-950 bg-emerald-400 hover:bg-emerald-300 transition-all flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Simulate 150 MB Batch Run
+          </button>
+        </div>
+
+        <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+          <div class="p-4 rounded-xl bg-black/40 border border-white/[0.06]">
+            <div class="text-[11px] text-zinc-400 uppercase tracking-wider font-semibold">Simulated File</div>
+            <div class="text-lg font-bold text-white mt-1">150.0 MB</div>
+          </div>
+          <div class="p-4 rounded-xl bg-black/40 border border-white/[0.06]">
+            <div class="text-[11px] text-zinc-400 uppercase tracking-wider font-semibold">Network Upload</div>
+            <div id="simUpload" class="text-lg font-bold text-emerald-400 mt-1">0.00 KB</div>
+          </div>
+          <div class="p-4 rounded-xl bg-black/40 border border-white/[0.06]">
+            <div class="text-[11px] text-zinc-400 uppercase tracking-wider font-semibold">External Requests</div>
+            <div id="simRequests" class="text-lg font-bold text-emerald-400 mt-1">0 Calls</div>
+          </div>
+          <div class="p-4 rounded-xl bg-black/40 border border-white/[0.06]">
+            <div class="text-[11px] text-zinc-400 uppercase tracking-wider font-semibold">Execution Engine</div>
+            <div id="simStatus" class="text-lg font-bold text-zinc-200 mt-1">Client CPU</div>
+          </div>
+        </div>
+
+        <div id="simLog" class="mt-4 p-3 rounded-lg bg-black/60 border border-white/[0.05] font-mono text-[11px] text-emerald-400/90 hidden">
+          &gt; Ready. Click "Simulate 150 MB Batch Run" to inspect local memory stream.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 21 TOOLS SUITE DIRECTORY (FILTERABLE & SEARCHABLE) -->
+  <!-- ========================================================================= -->
+  <section id="tools" class="py-20 border-t border-white/[0.08] relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 px-3 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20">
+          Complete Feature Catalog
+        </span>
+        <h2 class="mt-3 text-3xl sm:text-4xl font-display font-extrabold text-white">
+          All 21 Pro Tools. One Streamlined Interface.
+        </h2>
+        <p class="mt-3 text-zinc-400 text-sm sm:text-base">
+          Filter by category or search by keyword to explore the complete arsenal of document utilities.
+        </p>
+      </div>
+
+      <!-- Search & Category Filter Bar -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-10 max-w-5xl mx-auto">
+        
+        <!-- Category Buttons -->
+        <div class="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-black/40 border border-white/10 w-full sm:w-auto">
+          <button onclick="filterTools('all')" id="btn-all" class="tool-filter active px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500 text-zinc-950 transition-all">
+            All (21)
+          </button>
+          <button onclick="filterTools('core')" id="btn-core" class="tool-filter px-3.5 py-1.5 rounded-lg text-xs font-semibold text-zinc-400 hover:text-white transition-all">
+            Core & Batch
+          </button>
+          <button onclick="filterTools('convert')" id="btn-convert" class="tool-filter px-3.5 py-1.5 rounded-lg text-xs font-semibold text-zinc-400 hover:text-white transition-all">
+            Convert & Extract
+          </button>
+          <button onclick="filterTools('edit')" id="btn-edit" class="tool-filter px-3.5 py-1.5 rounded-lg text-xs font-semibold text-zinc-400 hover:text-white transition-all">
+            Edit & Layout
+          </button>
+          <button onclick="filterTools('security')" id="btn-security" class="tool-filter px-3.5 py-1.5 rounded-lg text-xs font-semibold text-zinc-400 hover:text-white transition-all">
+            Security & Sign
+          </button>
+        </div>
+
+        <!-- Search Box -->
+        <div class="relative w-full sm:w-72">
+          <input 
+            type="text" 
+            id="toolSearchInput" 
+            placeholder="Search tools (e.g. compress, sign)..." 
+            oninput="handleToolSearch()"
+            class="w-full px-4 py-2 pl-9 rounded-xl bg-black/40 border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500 transition-colors"
+          >
+          <svg class="w-4 h-4 text-zinc-500 absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+
+      </div>
+
+      <!-- Tools Grid (21 Cards) -->
+      <div id="toolsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- RENDERED BY JAVASCRIPT FOR DYNAMIC FILTERING & SEARCH -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- COMPETITIVE COMPARISON TABLE -->
+  <!-- ========================================================================= -->
+  <section id="comparison" class="py-20 border-t border-white/[0.08] bg-[#0c111d]/50 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 px-3 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20">
+          Unbiased Matrix
+        </span>
+        <h2 class="mt-3 text-3xl sm:text-4xl font-display font-extrabold text-white">
+          LargePDF vs. Industry Standards
+        </h2>
+        <p class="mt-3 text-zinc-400 text-sm sm:text-base">
+          See why users are abandoning commercial cloud services for LargePDF's zero-knowledge architecture.
+        </p>
+      </div>
+
+      <!-- Table Container -->
+      <div class="glass-card rounded-2xl overflow-hidden border border-white/10 max-w-5xl mx-auto">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs sm:text-sm">
+            <thead class="bg-black/40 text-zinc-400 font-semibold border-b border-white/[0.08]">
+              <tr>
+                <th class="py-4 px-6">Feature / Capability</th>
+                <th class="py-4 px-6 text-emerald-400 font-bold bg-emerald-500/10 border-x border-emerald-500/20">
+                  LargePDF by xCC
+                </th>
+                <th class="py-4 px-6">SmallPDF / iLovePDF</th>
+                <th class="py-4 px-6">Adobe Acrobat Web</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/[0.06] text-zinc-300">
+              
+              <tr>
+                <td class="py-4 px-6 font-medium text-white">File Size Limit</td>
+                <td class="py-4 px-6 font-bold text-emerald-400 bg-emerald-500/5 border-x border-emerald-500/20">
+                  Unlimited (Gigabytes)
+                </td>
+                <td class="py-4 px-6 text-zinc-400">15 – 25 MB Free cap</td>
+                <td class="py-4 px-6 text-zinc-400">100 MB (Requires Login)</td>
+              </tr>
+
+              <tr>
+                <td class="py-4 px-6 font-medium text-white">Cloud Server Upload</td>
+                <td class="py-4 px-6 font-bold text-emerald-400 bg-emerald-500/5 border-x border-emerald-500/20">
+                  0 Bytes (100% On-Device)
+                </td>
+                <td class="py-4 px-6 text-rose-400">Mandatory Cloud Upload</td>
+                <td class="py-4 px-6 text-rose-400">Mandatory Cloud Upload</td>
+              </tr>
+
+              <tr>
+                <td class="py-4 px-6 font-medium text-white">Batch Queue Limit</td>
+                <td class="py-4 px-6 font-bold text-emerald-400 bg-emerald-500/5 border-x border-emerald-500/20">
+                  Unlimited (Auto ZIP output)
+                </td>
+                <td class="py-4 px-6 text-zinc-400">1 file at a time (Paywalled)</td>
+                <td class="py-4 px-6 text-zinc-400">Restricted Free Tier</td>
+              </tr>
+
+              <tr>
+                <td class="py-4 px-6 font-medium text-white">Offline Availability</td>
+                <td class="py-4 px-6 font-bold text-emerald-400 bg-emerald-500/5 border-x border-emerald-500/20">
+                  Yes (Full Offline Capability)
+                </td>
+                <td class="py-4 px-6 text-rose-400">Fails without Internet</td>
+                <td class="py-4 px-6 text-rose-400">Fails without Internet</td>
+              </tr>
+
+              <tr>
+                <td class="py-4 px-6 font-medium text-white">Confidentiality & HIPAA</td>
+                <td class="py-4 px-6 font-bold text-emerald-400 bg-emerald-500/5 border-x border-emerald-500/20">
+                  Guaranteed by Architecture
+                </td>
+                <td class="py-4 px-6 text-zinc-400">Requires Enterprise BAA</td>
+                <td class="py-4 px-6 text-zinc-400">Requires Enterprise BAA</td>
+              </tr>
+
+              <tr>
+                <td class="py-4 px-6 font-medium text-white">Account / Registration</td>
+                <td class="py-4 px-6 font-bold text-emerald-400 bg-emerald-500/5 border-x border-emerald-500/20">
+                  None Required
+                </td>
+                <td class="py-4 px-6 text-zinc-400">Aggressive Signup Walls</td>
+                <td class="py-4 px-6 text-zinc-400">Mandatory Adobe ID</td>
+              </tr>
+
+              <tr>
+                <td class="py-4 px-6 font-medium text-white">Subscription Cost</td>
+                <td class="py-4 px-6 font-bold text-emerald-400 bg-emerald-500/5 border-x border-emerald-500/20">
+                  100% Free
+                </td>
+                <td class="py-4 px-6 text-zinc-400">$9.00 – $15.00 / month</td>
+                <td class="py-4 px-6 text-zinc-400">$19.99 / month</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- REAL-WORLD USE CASES -->
+  <!-- ========================================================================= -->
+  <section class="py-20 border-t border-white/[0.08] relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-bold uppercase tracking-wider text-teal-400 px-3 py-1 rounded-md bg-teal-500/10 border border-teal-500/20">
+          Tailored Workflows
+        </span>
+        <h2 class="mt-3 text-3xl sm:text-4xl font-display font-extrabold text-white">
+          Who Uses LargePDF?
+        </h2>
+        <p class="mt-3 text-zinc-400 text-sm sm:text-base">
+          From legal practitioners protecting NDAs to accountants handling confidential tax disclosures.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Legal & Compliance -->
+        <div class="glass-card rounded-2xl p-6 sm:p-7 border border-white/10 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-5">
+              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Legal & Law Firms</h3>
+            <p class="text-xs sm:text-sm text-zinc-300 leading-relaxed mb-4">
+              Paralegals and attorneys handle sensitive NDAs, litigation discoveries, and court filings. LargePDF allows flattening forms, sanitizing metadata, and stamping signatures with absolute certainty that client secrets never touch external servers.
+            </p>
+          </div>
+          <div class="text-xs font-semibold text-emerald-400 flex items-center gap-1.5">
+            Key tools: Digital Sign, Flatten Form, Metadata Wipe, Password Protect
+          </div>
+        </div>
+
+        <!-- Finance & Auditing -->
+        <div class="glass-card rounded-2xl p-6 sm:p-7 border border-white/10 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center mb-5">
+              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Finance & CPAs</h3>
+            <p class="text-xs sm:text-sm text-zinc-300 leading-relaxed mb-4">
+              Tax returns, bank disclosures, payroll spreadsheets, and multi-year ledgers frequently exceed standard 25 MB email limits. LargePDF's smart compression targets exact megabyte targets while preserving legibility on fine financial charts.
+            </p>
+          </div>
+          <div class="text-xs font-semibold text-amber-400 flex items-center gap-1.5">
+            Key tools: Target-Size Compression, Batch Processing, Word to PDF
+          </div>
+        </div>
+
+        <!-- Engineering & Academic -->
+        <div class="glass-card rounded-2xl p-6 sm:p-7 border border-white/10 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-sky-500/10 text-sky-400 flex items-center justify-center mb-5">
+              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Engineers & Researchers</h3>
+            <p class="text-xs sm:text-sm text-zinc-300 leading-relaxed mb-4">
+              Technical blue-prints, research papers, and scanned textbooks with hundreds of pages can be merged, cropped to remove printer borders, indexed with pagination, or converted into high-DPI vector image formats seamlessly.
+            </p>
+          </div>
+          <div class="text-xs font-semibold text-sky-400 flex items-center gap-1.5">
+            Key tools: Merge & Reorder, Crop PDF, Page Numbers, PDF to Images
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- FREQUENTLY ASKED QUESTIONS (ACCORDION) -->
+  <!-- ========================================================================= -->
+  <section id="faq" class="py-20 border-t border-white/[0.08] bg-[#0c111d]/50 relative">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 px-3 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20">
+          Clarity & Transparency
+        </span>
+        <h2 class="mt-3 text-3xl sm:text-4xl font-display font-extrabold text-white">
+          Frequently Asked Questions
+        </h2>
+        <p class="mt-3 text-zinc-400 text-sm">
+          Everything you need to know about LargePDF's architecture, security, and usage.
+        </p>
+      </div>
+
+      <!-- Accordion Items -->
+      <div class="space-y-3" id="faqAccordion">
+
+        <!-- FAQ Item 1 -->
+        <div class="glass-card rounded-xl border border-white/10 overflow-hidden">
+          <button onclick="toggleFaq(1)" class="w-full py-4 px-6 text-left flex items-center justify-between text-sm sm:text-base font-bold text-white hover:text-emerald-300 transition-colors">
+            <span>What does "100% Local Processing" actually mean?</span>
+            <svg id="faqIcon-1" class="w-5 h-5 text-zinc-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div id="faqAnswer-1" class="hidden px-6 pb-5 text-xs sm:text-sm text-zinc-300 leading-relaxed border-t border-white/[0.04] pt-3">
+            It means that when you select or drag-and-drop a document into LargePDF, that document never leaves your machine. Your browser loads the file directly into local memory, where client-side WebAssembly and compiled PDF manipulation binaries process the file entirely on your computer's processor. You can verify this anytime by opening your browser's Developer Tools Network tab: zero outgoing file upload requests occur.
+          </div>
+        </div>
+
+        <!-- FAQ Item 2 -->
+        <div class="glass-card rounded-xl border border-white/10 overflow-hidden">
+          <button onclick="toggleFaq(2)" class="w-full py-4 px-6 text-left flex items-center justify-between text-sm sm:text-base font-bold text-white hover:text-emerald-300 transition-colors">
+            <span>How can LargePDF handle 500 MB+ files without crashing my browser?</span>
+            <svg id="faqIcon-2" class="w-5 h-5 text-zinc-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div id="faqAnswer-2" class="hidden px-6 pb-5 text-xs sm:text-sm text-zinc-300 leading-relaxed border-t border-white/[0.04] pt-3">
+            LargePDF utilizes a specialized streaming ArrayBuffer architecture and progressive garbage-collection routines. Instead of duplicating massive documents in memory, it chunks data structures and dispatches tasks to an adjustable concurrency pool (1 to 4 parallel workers). This prevents browser tab crashes and keeps UI interactions buttery smooth even with thousands of pages.
+          </div>
+        </div>
+
+        <!-- FAQ Item 3 -->
+        <div class="glass-card rounded-xl border border-white/10 overflow-hidden">
+          <button onclick="toggleFaq(3)" class="w-full py-4 px-6 text-left flex items-center justify-between text-sm sm:text-base font-bold text-white hover:text-emerald-300 transition-colors">
+            <span>Can I use LargePDF completely offline?</span>
+            <svg id="faqIcon-3" class="w-5 h-5 text-zinc-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div id="faqAnswer-3" class="hidden px-6 pb-5 text-xs sm:text-sm text-zinc-300 leading-relaxed border-t border-white/[0.04] pt-3">
+            Yes! Once the application assets are cached in your browser or when deployed as a local static site, you can disconnect your Wi-Fi or go into Airplane mode and continue compressing, merging, converting, and signing documents indefinitely without an active internet connection.
+          </div>
+        </div>
+
+        <!-- FAQ Item 4 -->
+        <div class="glass-card rounded-xl border border-white/10 overflow-hidden">
+          <button onclick="toggleFaq(4)" class="w-full py-4 px-6 text-left flex items-center justify-between text-sm sm:text-base font-bold text-white hover:text-emerald-300 transition-colors">
+            <span>Are there any subscriptions, watermarks, or daily quotas?</span>
+            <svg id="faqIcon-4" class="w-5 h-5 text-zinc-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div id="faqAnswer-4" class="hidden px-6 pb-5 text-xs sm:text-sm text-zinc-300 leading-relaxed border-t border-white/[0.04] pt-3">
+            None. LargePDF does not inject promotional watermarks into your documents, does not throttle you after two files, and does not require credit cards or accounts. Because we do not run expensive server farms to process your files, we have no reason to impose arbitrary paywalls.
+          </div>
+        </div>
+
+        <!-- FAQ Item 5 -->
+        <div class="glass-card rounded-xl border border-white/10 overflow-hidden">
+          <button onclick="toggleFaq(5)" class="w-full py-4 px-6 text-left flex items-center justify-between text-sm sm:text-base font-bold text-white hover:text-emerald-300 transition-colors">
+            <span>Which browsers and operating systems are supported?</span>
+            <svg id="faqIcon-5" class="w-5 h-5 text-zinc-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div id="faqAnswer-5" class="hidden px-6 pb-5 text-xs sm:text-sm text-zinc-300 leading-relaxed border-t border-white/[0.04] pt-3">
+            Any modern desktop or mobile browser that supports standard HTML5 Canvas and WebAssembly. This includes Google Chrome, Microsoft Edge, Mozilla Firefox, Apple Safari, Brave, and Opera across Windows, macOS, Linux, iOS, and Android.
+          </div>
+        </div>
+
+        <!-- FAQ Item 6 -->
+        <div class="glass-card rounded-xl border border-white/10 overflow-hidden">
+          <button onclick="toggleFaq(6)" class="w-full py-4 px-6 text-left flex items-center justify-between text-sm sm:text-base font-bold text-white hover:text-emerald-300 transition-colors">
+            <span>Who created LargePDF?</span>
+            <svg id="faqIcon-6" class="w-5 h-5 text-zinc-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div id="faqAnswer-6" class="hidden px-6 pb-5 text-xs sm:text-sm text-zinc-300 leading-relaxed border-t border-white/[0.04] pt-3">
+            LargePDF was created by <strong>xCC</strong> as an uncompromising solution to the privacy and file-size frustrations of modern web utilities. It is designed to demonstrate that client-side browser computing can outperform centralized cloud services in speed, security, and user respect.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- FINAL CALL TO ACTION BANNER -->
+  <!-- ========================================================================= -->
+  <section class="py-20 sm:py-24 relative overflow-hidden">
+    <!-- Ambient Glow behind CTA -->
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-emerald-500/5 to-emerald-500/10 pointer-events-none"></div>
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      
+      <div class="glass-card rounded-3xl p-8 sm:p-14 border border-emerald-500/30 glow-brand">
+        <h2 class="text-3xl sm:text-5xl font-display font-extrabold text-white tracking-tight leading-tight">
+          Ready to experience genuinely private, uncapped PDF editing?
+        </h2>
+        <p class="mt-4 text-zinc-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+          Open LargePDF Studio right now. No account creation, no credit cards, no file size limits, and zero cloud uploads.
+        </p>
+
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+          <a href="https://largepdf-zh8v.onrender.com" target="_blank" rel="noopener noreferrer" class="px-8 py-4 rounded-xl text-sm font-bold text-zinc-950 bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 shadow-xl shadow-emerald-500/30 transition-all flex items-center gap-3">
+            <span>Launch LargePDF Studio</span>
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </a>
+
+          <a href="./largepdf-showcase.zip" download="largepdf-showcase.zip" class="px-6 py-4 rounded-xl text-sm font-semibold text-zinc-200 hover:text-white bg-white/[0.08] hover:bg-white/[0.14] border border-white/20 transition-all flex items-center gap-2">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Download Showcase Bundle (.zip)
+          </a>
+        </div>
+
+        <div class="mt-6 flex items-center justify-center gap-6 text-xs text-zinc-400">
+          <span class="flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            100% Free Forever
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            Zero Tracking
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            Instant Processing
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- FOOTER -->
+  <!-- ========================================================================= -->
+  <footer class="py-12 border-t border-white/[0.08] bg-[#070a12] text-xs text-zinc-400">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+      
+      <!-- Brand & Credits -->
+      <div class="flex items-center gap-3">
+        <div class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        </div>
+        <div>
+          <span class="font-bold text-zinc-200">LargePDF</span>
+          <span class="text-zinc-500 ml-1">by xCC</span>
+          <span class="text-zinc-600 ml-2">&bull; &copy; 2026 All rights reserved.</span>
+        </div>
+      </div>
+
+      <!-- Quick Action Links -->
+      <div class="flex items-center gap-6">
+        <a href="#features" class="hover:text-zinc-200 transition-colors">Features</a>
+        <a href="#tools" class="hover:text-zinc-200 transition-colors">21 Tools</a>
+        <a href="#architecture" class="hover:text-zinc-200 transition-colors">Architecture</a>
+        <a href="./largepdf-showcase.zip" download class="hover:text-emerald-400 transition-colors">Download Showcase ZIP</a>
+        <a href="https://largepdf-zh8v.onrender.com" target="_blank" class="text-emerald-400 font-semibold hover:underline">
+          Launch App &rarr;
+        </a>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- INTERACTIVE CLIENT SCRIPTS -->
+  <!-- ========================================================================= -->
+  <script>
+    // -------------------------------------------------------------
+    // 1. DATA: 21 TOOLS SPECIFICATION
+    // -------------------------------------------------------------
+    const TOOLS_DATA = [
+      {
+        id: 'compress',
+        name: 'Compress PDF',
+        category: 'core',
+        categoryLabel: 'Core & Batch',
+        badgeColor: 'emerald',
+        desc: 'Reduce file size by up to 90% without compromising visual clarity. Supports Lossless, Balanced, Maximum, and custom target MB presets.',
+        formats: 'PDF, Images &rarr; Compressed PDF',
+        icon: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>`
+      },
+      {
+        id: 'merge',
+        name: 'Merge PDF & Images',
+        category: 'core',
+        categoryLabel: 'Core & Batch',
+        badgeColor: 'amber',
+        desc: 'Combine multiple PDFs, scans, photos, and spreadsheets into a single master document in seconds. Instant drag-and-drop reordering.',
+        formats: 'PDF, JPG, PNG &rarr; Unified PDF',
+        icon: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>`
+      },
+      {
+        id: 'split',
+        name: 'Split PDF',
+        category: 'core',
+        categoryLabel: 'Core & Batch',
+        badgeColor: 'rose',
+        desc: 'Extract specific page ranges (e.g. 1-5, 8, 12-14) or burst large binders into individual standalone PDF files automatically packaged in a ZIP.',
+        formats: 'PDF &rarr; Multi-PDF (ZIP)',
+        icon: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z"/></svg>`
+      },
+      {
+        id: 'word-to-pdf',
+        name: 'Word to PDF',
+        category: 'convert',
+        categoryLabel: 'Convert & Extract',
+        badgeColor: 'sky',
+        desc: 'Direct client-side DOCX parser rendering text, tables, headers, and layouts into standard A4 PDF files without Microsoft Word installed.',
+        formats: 'DOCX &rarr; PDF',
+        icon: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>`
+      },
+      {
+        id: 'pdf-to-word',
+        name: 'PDF to Word',
+        category: 'convert',
+        categoryLabel: 'Convert & Extract',
+        badgeColor: 'sky',
+        desc: 'Extract formatted document flow, paragraphs, and structure from PDFs into clean, editable Microsoft Word DOCX files in browser RAM.',
+        formats: 'PDF &rarr; DOCX',
+        icon: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/></svg>`
+      },
+      {
+        id: 'pdf-to-images',
+        name: 'PDF to Images',
+        category: 'convert',
+        categoryLabel: 'Convert & Extract',
+        badgeColor: 'orange',
+        desc: 'Rasterize PDF pages into crystal-clear PNG, JPEG, or WebP images with custom DPI resolutions (72 to 300 DPI) for presentations and web sharing.',
+        formats: 'PDF &rarr; PNG / JPG / WebP',
+        icon: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`
+      },
+      {
+        id: 'images-to-pdf',
+        name: 'Images to PDF',
+        category: 'convert',
+        categoryLabel: 'Convert & Extract',
+        badgeColor: 'pink',
+        desc: 'Convert folders of photos, receipts, or diagrams into clean A4 or Letter PDFs with automated aspect-ratio alignment and margin preservation.',
+        formats: 'JPG, PNG, WebP &rarr; PDF',
+        icon: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`
+      },
+      {
+        id: 'extract',
+        name: 'Extract Text',
+        category: 'convert',
+        categoryLabel: 'Convert & Extract',
+        badgeColor: 'emerald',
+        desc: 'Pull all readable text streams out of PDFs into clean plain text (.txt), Markdown (.md), or structured JSON with full page coordinate references.',
+        formats: 'PDF &rarr; TXT / MD / JSON',
+        icon: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7"/></svg>`
+      },
+      {
+        id: 'rotate',
+        name: 'Rotate Pages',
+        category: 'edit',
+        categoryLabel: 'Edit & Layout',
+        badgeColor: 'cyan',
+        desc: 'Fix sideways or upside-down scans instantly. Rotate entire documents or individual page numbers by 90°, 180°, or 270° with visual previews.',
+        formats: 'PDF &rarr; Rotated PDF',
+        icon: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>`
+      },
+      {
+        id: 'delete-pages',
+        name: 'Delete Pages',
+        category: 'edit',
+        categoryLabel: 'Edit & Layout',
+        badgeColor: 'rose',
+        desc: 'Strip out unwanted pages, accidental blank scanner sheets, or outdated appendices using intuitive page ranges or visual page click selection.',
+        formats: 'PDF &rarr; Pruned PDF',
+        icon: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>`
+      },
+      {
+        id: 'reorder',
+        name: 'Reorder Pages',
+        category: 'edit',
+        categoryLabel: 'Edit & Layout',
+        badgeColor: 'amber',
+        desc: 'Drag and drop page thumbnails to rearrange document flow in real time. Ideal for re-sequencing multi-page contracts before distribution.',
+        formats: 'PDF &rarr; Re-ordered PDF',
+        icon: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>`
+      },
+      {
+        id: 'crop',
+        name: 'Crop Margins',
+        category: 'edit',
+        categoryLabel: 'Edit & Layout',
+        badgeColor: 'emerald',
+        desc: 'Trim black borders, scanner punch holes, or headers and footers with precision percentage or preset bounds across all pages.',
+        formats: 'PDF &rarr; Cropped PDF',
+        icon: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 2v14a2 2 0 002 2h14M18 22V8a2 2 0 00-2-2H2"/></svg>`
+      },
+      {
+        id: 'page-numbers',
+        name: 'Page Numbers',
+        category: 'edit',
+        categoryLabel: 'Edit & Layout',
+        badgeColor: 'teal',
+        desc: 'Stamp automatic pagination in bottom-center, header, or corners. Formats include numeric (1, 2, 3), Roman (i, ii), or dashed (- 1 -).',
+        formats: 'PDF &rarr; Paginated PDF',
+        icon: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/></svg>`
+      },
+      {
+        id: 'watermark',
+        name: 'Watermark PDF',
+        category: 'edit',
+        categoryLabel: 'Edit & Layout',
+        badgeColor: 'yellow',
+        desc: 'Stamp semi-transparent diagonal or footer watermarks (e.g. CONFIDENTIAL, DRAFT, INTERNAL ONLY) with custom opacity and rotation angles.',
+        formats: 'PDF &rarr; Watermarked PDF',
+        icon: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>`
+      },
+      {
+        id: 'add-text',
+        name: 'Add Text & Notes',
+        category: 'edit',
+        categoryLabel: 'Edit & Layout',
+        badgeColor: 'lime',
+        desc: 'Overlay custom typography, notes, Bates numbers, or disclaimers at exact X/Y page coordinates with customizable font sizes and colors.',
+        formats: 'PDF &rarr; Annotated PDF',
+        icon: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>`
+      },
+      {
+        id: 'stamp-image',
+        name: 'Stamp Image & Logo',
+        category: 'edit',
+        categoryLabel: 'Edit & Layout',
+        badgeColor: 'purple',
+        desc: 'Stamp company logos, rubber seal graphics, QR codes, or approval badges onto specified corners or pages with custom opacity.',
+        formats: 'PDF + Logo (PNG/JPG) &rarr; Stamped PDF',
+        icon: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`
+      },
+      {
+        id: 'sign',
+        name: 'Sign Contract',
+        category: 'security',
+        categoryLabel: 'Security & Sign',
+        badgeColor: 'emerald',
+        desc: 'Sign contracts on interactive smooth-vector touch canvas or generate elegant typed signatures placed on target signature lines.',
+        formats: 'PDF &rarr; Signed PDF',
+        icon: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>`
+      },
+      {
+        id: 'flatten',
+        name: 'Flatten PDF',
+        category: 'security',
+        categoryLabel: 'Security & Sign',
+        badgeColor: 'teal',
+        desc: 'Lock interactive form fields, checkboxes, and editable text into unalterable permanent page graphics to prevent tampering before filing.',
+        formats: 'PDF &rarr; Flattened PDF',
+        icon: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`
+      },
+      {
+        id: 'metadata',
+        name: 'Wipe / Edit Metadata',
+        category: 'security',
+        categoryLabel: 'Security & Sign',
+        badgeColor: 'rose',
+        desc: 'Sanitize hidden author names, camera serials, edit timestamps, and software signatures from PDFs before transmitting to external third parties.',
+        formats: 'PDF &rarr; Sanitized PDF',
+        icon: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>`
+      },
+      {
+        id: 'protect',
+        name: 'Protect with Password',
+        category: 'security',
+        categoryLabel: 'Security & Sign',
+        badgeColor: 'rose',
+        desc: 'Encrypt confidential PDFs with standard RC4/AES algorithms. Restrict unauthorized viewing, high-resolution printing, or text copying.',
+        formats: 'PDF &rarr; Encrypted PDF',
+        icon: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>`
+      },
+      {
+        id: 'unlock',
+        name: 'Unlock Password PDF',
+        category: 'security',
+        categoryLabel: 'Security & Sign',
+        badgeColor: 'teal',
+        desc: 'Decrypt protected PDFs using your master password to permanently strip the password requirement for archiving or merging.',
+        formats: 'Encrypted PDF &rarr; Unlocked PDF',
+        icon: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/></svg>`
+      }
+    ];
+
+    // -------------------------------------------------------------
+    // 2. INTERACTIVE FEATURE TABS DATA & LOGIC
+    // -------------------------------------------------------------
+    const FEATURE_TABS = {
+      compress: {
+        title: "Smart Lossless & Target-Size Compression",
+        desc: "Slash bloated PDF sizes by up to 90% without pixelating text or ruining charts. Choose from calibrated presets or specify an exact target in megabytes for strict email and government portal requirements.",
+        image: "./images/photo_shrink_docs_1795535942681.jpg",
+        bullets: [
+          "Calibrated 150 / 96 / 72 DPI image down-sampling",
+          "Automatic grayscale conversion toggle for invoices & text",
+          "Instant batch compression with ZIP archive generation",
+          "Target size mode (e.g., clamp 45MB scans down to exactly 4.8MB)"
+        ],
+        metricLabel: "Real-world Benchmark",
+        metricVal: "48.2 MB &rarr; 4.9 MB (-89.8% in 1.2s)"
+      },
+      merge: {
+        title: "Zero-Latency Document Merge & Split",
+        desc: "Combine massive document stacks, photos, receipts, and scans into a single cohesive publication with effortless drag-and-drop page sequencing. Burst 500-page archives into customized chapter ranges.",
+        image: "./images/photo_merge_docs_1795546009150.jpg",
+        bullets: [
+          "Mix PDFs, PNGs, and JPEGs in a single unified queue",
+          "Dynamic range extractor (e.g. '1-3, 5, 8-12')",
+          "Automatic batch-split ZIP packaging",
+          "Retains original PDF vector sharpness and bookmarks"
+        ],
+        metricLabel: "Processing Speed",
+        metricVal: "1,200 Pages Unified in 840ms"
+      },
+      sign: {
+        title: "Digital Signatures & Tamper-Proof Flattening",
+        desc: "Sign contracts, lease agreements, and NDAs directly on an interactive smoothing canvas. Once signed, flatten form fields into permanent rasterized pages so no one can alter figures or checkboxes.",
+        image: "./images/photo_sign_contract_1795546008132.jpg",
+        bullets: [
+          "Biometric touch/mouse drawing with dynamic stroke smoothing",
+          "Clean typographical name stamp generator",
+          "Lock form fields, radio buttons, and annotations",
+          "Zero telemetry: Your biometric signature is never sent anywhere"
+        ],
+        metricLabel: "Security Posture",
+        metricVal: "Mathematical Client Isolation"
+      },
+      convert: {
+        title: "Bidirectional Word & High-DPI Image Conversion",
+        desc: "Convert DOCX files directly to PDF without needing Microsoft Word or Adobe Acrobat installed. Rasterize critical pages to 300 DPI PNG, JPEG, or WebP graphics for print and high-res presentations.",
+        image: "./images/photo_convert_typewriter_doc_1795546028484.jpg",
+        bullets: [
+          "Native DOCX to PDF client-side rendering",
+          "PDF to editable DOCX text-flow extraction",
+          "High-DPI vector rasterization at 72, 150, or 300 DPI",
+          "Convert photo collections into formatted A4 & Letter PDFs"
+        ],
+        metricLabel: "Conversion Engine",
+        metricVal: "Pure In-Browser WebAssembly"
+      },
+      privacy: {
+        title: "Metadata Sanitization & Password Hardening",
+        desc: "Hidden metadata in PDFs can leak author usernames, software versions, GPS locations, and edit histories. LargePDF wipes these markers completely and allows encrypting documents with strong passwords.",
+        image: "./images/photo_private_desk_1795535943425.jpg",
+        bullets: [
+          "Complete wipe of Creator, Producer, Title, and Modification dates",
+          "Standard RC4 and AES user password encryption",
+          "Granular permission locks (disable printing, disable text copy)",
+          "Instant offline unlock for authorized archives"
+        ],
+        metricLabel: "Privacy Standard",
+        metricVal: "Zero Cloud Traces &bull; 0 KB Uploaded"
+      }
+    };
+
+    function switchTab(tabKey) {
+      const data = FEATURE_TABS[tabKey];
+      if (!data) return;
+
+      // Update button styles
+      document.querySelectorAll('.feature-tab').forEach(b => {
+        b.className = 'feature-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all border bg-white/[0.04] border-white/10 text-zinc-300 hover:bg-white/[0.08]';
+      });
+      const activeBtn = document.getElementById('tab-' + tabKey);
+      if (activeBtn) {
+        activeBtn.className = 'feature-tab active px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all border bg-emerald-500/20 border-emerald-500 text-emerald-300';
+      }
+
+      // Render tab content
+      const container = document.getElementById('featureContent');
+      container.innerHTML = `
+        <div class="lg:col-span-6 flex flex-col justify-center">
+          <span class="text-xs font-bold text-emerald-400 tracking-wider uppercase mb-2">Workflow Spotlight</span>
+          <h3 class="text-2xl sm:text-3xl font-display font-extrabold text-white mb-4 leading-tight">${data.title}</h3>
+          <p class="text-sm text-zinc-300 leading-relaxed mb-6">${data.desc}</p>
+          
+          <ul class="space-y-3 mb-8">
+            ${data.bullets.map(b => `
+              <li class="flex items-center gap-3 text-xs sm:text-sm text-zinc-300">
+                <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0">&check;</span>
+                <span>${b}</span>
+              </li>
+            `).join('')}
+          </ul>
+
+          <div class="p-4 rounded-xl bg-black/40 border border-white/10 flex items-center justify-between">
+            <span class="text-xs text-zinc-400 font-medium">${data.metricLabel}</span>
+            <span class="text-xs sm:text-sm font-bold text-emerald-400 font-mono">${data.metricVal}</span>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6">
+          <div class="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl group">
+            <img 
+              src="${data.image}" 
+              alt="${data.title}" 
+              class="w-full aspect-[4/3] object-cover group-hover:scale-105 transition-transform duration-500 block"
+              loading="lazy"
+            >
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-6">
+              <span class="text-xs text-zinc-300 font-medium flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                LargePDF Workspace Documentary View
+              </span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // -------------------------------------------------------------
+    // 3. RENDER 21 TOOLS & SEARCH/FILTER
+    // -------------------------------------------------------------
+    let currentCategory = 'all';
+
+    function renderTools(tools) {
+      const grid = document.getElementById('toolsGrid');
+      if (!grid) return;
+
+      if (tools.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-12 text-center text-zinc-500 text-sm">
+            No tools found matching your search. Try "compress", "word", "sign" or "protect".
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = tools.map(tool => `
+        <div class="glass-card p-6 rounded-2xl flex flex-col justify-between group hover:border-emerald-500/30">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-10 h-10 rounded-xl bg-white/[0.06] group-hover:bg-emerald-500/20 text-zinc-200 group-hover:text-emerald-400 flex items-center justify-center transition-colors">
+                ${tool.icon}
+              </div>
+              <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-white/[0.05] text-zinc-400 border border-white/5">
+                ${tool.categoryLabel}
+              </span>
+            </div>
+
+            <h3 class="text-base font-bold text-white mb-2 group-hover:text-emerald-300 transition-colors">
+              ${tool.name}
+            </h3>
+
+            <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+              ${tool.desc}
+            </p>
+          </div>
+
+          <div class="pt-4 border-t border-white/[0.06] flex items-center justify-between text-[11px]">
+            <span class="text-zinc-500 font-mono">${tool.formats}</span>
+            <a href="https://largepdf-zh8v.onrender.com" target="_blank" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+              Use tool &rarr;
+            </a>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterTools(category) {
+      currentCategory = category;
+      
+      // Update buttons
+      document.querySelectorAll('.tool-filter').forEach(btn => {
+        btn.className = 'tool-filter px-3.5 py-1.5 rounded-lg text-xs font-semibold text-zinc-400 hover:text-white transition-all';
+      });
+      const activeBtn = document.getElementById('btn-' + category);
+      if (activeBtn) {
+        activeBtn.className = 'tool-filter active px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500 text-zinc-950 transition-all';
+      }
+
+      applyFilters();
+    }
+
+    function handleToolSearch() {
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const search = (document.getElementById('toolSearchInput')?.value || '').toLowerCase().trim();
+      
+      const filtered = TOOLS_DATA.filter(tool => {
+        const matchesCategory = (currentCategory === 'all') || (tool.category === currentCategory);
+        const matchesSearch = !search || 
+          tool.name.toLowerCase().includes(search) || 
+          tool.desc.toLowerCase().includes(search) ||
+          tool.formats.toLowerCase().includes(search);
+
+        return matchesCategory && matchesSearch;
+      });
+
+      renderTools(filtered);
+    }
+
+    // -------------------------------------------------------------
+    // 4. NETWORK SIMULATOR INTERACTION
+    // -------------------------------------------------------------
+    function runNetworkSimulation() {
+      const btn = document.getElementById('runSimBtn');
+      const log = document.getElementById('simLog');
+      const uploadVal = document.getElementById('simUpload');
+      const reqVal = document.getElementById('simRequests');
+      const statusVal = document.getElementById('simStatus');
+
+      if (!btn || !log) return;
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="inline-block animate-spin mr-2">&circlearrowright;</span> Processing in Memory...`;
+      log.classList.remove('hidden');
+      log.innerHTML = `&gt; Reading 150 MB buffer into FileReader ArrayBuffer...<br>`;
+
+      setTimeout(() => {
+        log.innerHTML += `&gt; Initializing WebAssembly Wasm pipeline...<br>`;
+        log.innerHTML += `&gt; Inspecting network sockets: 0 outgoing TCP / HTTPS connections initiated.<br>`;
+      }, 350);
+
+      setTimeout(() => {
+        log.innerHTML += `&gt; Finished parsing 420 pages on local CPU thread in 86ms.<br>`;
+        log.innerHTML += `&gt; [VERIFIED]: Network Payload = 0.00 KB. Confidential data remained strictly on-device.`;
+        btn.disabled = false;
+        btn.innerHTML = `Run Another Test`;
+        uploadVal.textContent = "0.00 KB";
+        reqVal.textContent = "0 Requests";
+        statusVal.textContent = "100% Isolated";
+      }, 750);
+    }
+
+    // -------------------------------------------------------------
+    // 5. FAQ ACCORDION LOGIC
+    // -------------------------------------------------------------
+    function toggleFaq(index) {
+      const answer = document.getElementById(`faqAnswer-${index}`);
+      const icon = document.getElementById(`faqIcon-${index}`);
+      if (!answer || !icon) return;
+
+      const isHidden = answer.classList.contains('hidden');
+
+      // Close all
+      for (let i = 1; i <= 6; i++) {
+        const a = document.getElementById(`faqAnswer-${i}`);
+        const ic = document.getElementById(`faqIcon-${i}`);
+        if (a) a.classList.add('hidden');
+        if (ic) ic.classList.remove('rotate-180');
+      }
+
+      // Open selected if it was hidden
+      if (isHidden) {
+        answer.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+      }
+    }
+
+    // -------------------------------------------------------------
+    // 6. MOBILE MENU TOGGLE
+    // -------------------------------------------------------------
+    document.getElementById('mobileMenuBtn')?.addEventListener('click', () => {
+      const drawer = document.getElementById('mobileDrawer');
+      if (drawer) {
+        drawer.classList.toggle('hidden');
+      }
+    });
+
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', () => {
+      switchTab('compress');
+      renderTools(TOOLS_DATA);
+    });
+  </script>
+</body>
+</html>

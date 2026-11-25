@@ -215,14 +215,14 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="inspector-title"
     >
-      <div className="bg-white dark:bg-[#181f24] border border-[#dce3e1] dark:border-[#2c3740] rounded-lg w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
+      <div className="bg-white dark:bg-[#181f24] border border-[#dce3e1] dark:border-[#2c3740] rounded-lg w-full max-w-4xl max-h-[94dvh] sm:max-h-[90vh] flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="px-5 py-4 border-b border-[#dce3e1] dark:border-[#2c3740] flex items-center justify-between gap-4">
+        <div className="px-3.5 sm:px-5 py-3 sm:py-4 border-b border-[#dce3e1] dark:border-[#2c3740] flex items-center justify-between gap-2 sm:gap-4">
           <div className="min-w-0">
             <h2
               id="inspector-title"
@@ -318,7 +318,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
         )}
 
         {/* Body */}
-        <div className="p-5 overflow-y-auto flex-1 bg-[#f4f7f6] dark:bg-[#111619] space-y-5">
+        <div className="p-3.5 sm:p-5 overflow-y-auto flex-1 bg-[#f4f7f6] dark:bg-[#111619] space-y-4 sm:space-y-5">
           {extractedPreview && (
             <div className="bg-white dark:bg-[#181f24] border border-[#dce3e1] dark:border-[#2c3740] rounded-lg p-4">
               <div className="flex items-center justify-between mb-2.5">
@@ -378,6 +378,13 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
                     dir="ltr"
                     onPointerDown={(e) => {
                       draggingRef.current = true;
+                      if (typeof e.currentTarget.setPointerCapture === 'function') {
+                        try {
+                          e.currentTarget.setPointerCapture(e.pointerId);
+                        } catch {
+                          // Ignore unsupported pointer capture
+                        }
+                      }
                       updateSplitFromClientX(e.clientX);
                     }}
                     onPointerMove={(e) => {
@@ -386,6 +393,9 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
                       }
                     }}
                     onPointerUp={() => {
+                      draggingRef.current = false;
+                    }}
+                    onPointerCancel={() => {
                       draggingRef.current = false;
                     }}
                     onPointerLeave={() => {
@@ -397,7 +407,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
                       src={afterCompareUrl}
                       alt={t.compareProcessed}
                       draggable={false}
-                      className="block max-h-[52vh] w-auto object-contain"
+                      className="block max-h-[44dvh] sm:max-h-[52vh] w-auto object-contain"
                     />
                     <img
                       src={beforeCompareUrl}
@@ -504,18 +514,18 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
                         )}
                       </div>
 
-                      <div className="flex items-center justify-between text-xs gap-1">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-1.5 sm:gap-1">
                         <span className="font-mono tabular-nums text-zinc-700 dark:text-[#d6e0e5] truncate">
                           {t.inspectorPageNum(page.pageNumber)}
                           {page.rotation > 0 ? ` · ${page.rotation}°` : ''}
                         </span>
-                        <div className="flex items-center gap-0.5 shrink-0">
+                        <div className="flex items-center justify-between sm:justify-end gap-0.5 shrink-0">
                           <button
                             type="button"
                             onClick={() => handleMovePage(index, -1)}
                             disabled={index === 0}
                             aria-label={`${t.inspectorMoveUp} - ${t.inspectorPageNum(page.pageNumber)}`}
-                            className="p-1 text-zinc-600 dark:text-[#d6e0e5] hover:text-zinc-900 dark:hover:text-white hover:bg-[#eef2f1] dark:hover:bg-[#222b31] rounded disabled:opacity-30"
+                            className="p-1.5 sm:p-1 min-w-[32px] min-h-[32px] sm:min-w-0 sm:min-h-0 flex items-center justify-center text-zinc-600 dark:text-[#d6e0e5] hover:text-zinc-900 dark:hover:text-white hover:bg-[#eef2f1] dark:hover:bg-[#222b31] rounded disabled:opacity-30"
                           >
                             <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" />
                           </button>
@@ -524,7 +534,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
                             onClick={() => handleMovePage(index, 1)}
                             disabled={index === edits.length - 1}
                             aria-label={`${t.inspectorMoveDown} - ${t.inspectorPageNum(page.pageNumber)}`}
-                            className="p-1 text-zinc-600 dark:text-[#d6e0e5] hover:text-zinc-900 dark:hover:text-white hover:bg-[#eef2f1] dark:hover:bg-[#222b31] rounded disabled:opacity-30"
+                            className="p-1.5 sm:p-1 min-w-[32px] min-h-[32px] sm:min-w-0 sm:min-h-0 flex items-center justify-center text-zinc-600 dark:text-[#d6e0e5] hover:text-zinc-900 dark:hover:text-white hover:bg-[#eef2f1] dark:hover:bg-[#222b31] rounded disabled:opacity-30"
                           >
                             <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
                           </button>
@@ -532,7 +542,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
                             type="button"
                             onClick={() => handleRotatePage(index, -90)}
                             aria-label={`${t.turnLeft} - ${t.inspectorPageNum(page.pageNumber)}`}
-                            className="p-1 text-zinc-600 dark:text-[#d6e0e5] hover:text-zinc-900 dark:hover:text-white hover:bg-[#eef2f1] dark:hover:bg-[#222b31] rounded"
+                            className="p-1.5 sm:p-1 min-w-[32px] min-h-[32px] sm:min-w-0 sm:min-h-0 flex items-center justify-center text-zinc-600 dark:text-[#d6e0e5] hover:text-zinc-900 dark:hover:text-white hover:bg-[#eef2f1] dark:hover:bg-[#222b31] rounded"
                           >
                             <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
                           </button>
@@ -540,7 +550,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
                             type="button"
                             onClick={() => handleRotatePage(index, 90)}
                             aria-label={`${t.turnRight} - ${t.inspectorPageNum(page.pageNumber)}`}
-                            className="p-1 text-zinc-600 dark:text-[#d6e0e5] hover:text-zinc-900 dark:hover:text-white hover:bg-[#eef2f1] dark:hover:bg-[#222b31] rounded"
+                            className="p-1.5 sm:p-1 min-w-[32px] min-h-[32px] sm:min-w-0 sm:min-h-0 flex items-center justify-center text-zinc-600 dark:text-[#d6e0e5] hover:text-zinc-900 dark:hover:text-white hover:bg-[#eef2f1] dark:hover:bg-[#222b31] rounded"
                           >
                             <RotateCw className="w-3.5 h-3.5" aria-hidden="true" />
                           </button>
@@ -548,7 +558,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
                             type="button"
                             onClick={() => handleToggleDelete(index)}
                             aria-label={t.inspectorPageNum(page.pageNumber)}
-                            className={`p-1 rounded ${
+                            className={`p-1.5 sm:p-1 min-w-[32px] min-h-[32px] sm:min-w-0 sm:min-h-0 flex items-center justify-center rounded ${
                               page.deleted
                                 ? 'text-teal-700 dark:text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-950/50'
                                 : 'text-zinc-500 dark:text-[#96a7b1] hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50'

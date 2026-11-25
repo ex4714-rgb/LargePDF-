@@ -203,29 +203,29 @@ export const ToolOptionsBar: React.FC<ToolOptionsBarProps> = ({
     }, 'image/png');
   };
 
-  const getCanvasPoint = (e: React.MouseEvent | React.TouchEvent) => {
+  const getCanvasPoint = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current!;
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / Math.max(1, rect.width);
     const scaleY = canvas.height / Math.max(1, rect.height);
-    if ('touches' in e && e.touches.length > 0) {
-      return {
-        x: (e.touches[0].clientX - rect.left) * scaleX,
-        y: (e.touches[0].clientY - rect.top) * scaleY,
-      };
-    }
-    const mouse = e as React.MouseEvent;
     return {
-      x: (mouse.clientX - rect.left) * scaleX,
-      y: (mouse.clientY - rect.top) * scaleY,
+      x: (e.clientX - rect.left) * scaleX,
+      y: (e.clientY - rect.top) * scaleY,
     };
   };
 
-  const startDraw = (e: React.MouseEvent | React.TouchEvent) => {
+  const startDraw = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
+    if (typeof canvas.setPointerCapture === 'function') {
+      try {
+        canvas.setPointerCapture(e.pointerId);
+      } catch {
+        // Ignore unsupported pointer capture
+      }
+    }
     isDrawingRef.current = true;
     ctx.strokeStyle = '#0f172a';
     ctx.lineWidth = 3;
@@ -236,7 +236,7 @@ export const ToolOptionsBar: React.FC<ToolOptionsBarProps> = ({
     ctx.moveTo(pt.x, pt.y);
   };
 
-  const moveDraw = (e: React.MouseEvent | React.TouchEvent) => {
+  const moveDraw = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (!isDrawingRef.current) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -526,7 +526,7 @@ export const ToolOptionsBar: React.FC<ToolOptionsBarProps> = ({
 
       {activeTool === 'merge' && (
         <div className="flex flex-wrap items-end justify-between gap-4">
-          <div className="flex-1 min-w-[240px] max-w-md">
+          <div className="flex-1 min-w-0 w-full sm:w-auto sm:min-w-[240px] max-w-md">
             <label
               htmlFor="merge-filename"
               className="inline-flex items-center gap-2 text-sm font-semibold text-zinc-800 dark:text-[#e6edf0] mb-1.5"
@@ -1189,14 +1189,14 @@ export const ToolOptionsBar: React.FC<ToolOptionsBarProps> = ({
 
           {sign.mode === 'draw' ? (
             <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-medium text-zinc-600 dark:text-[#a7b5be]">
+              <div className="flex items-center justify-between gap-2 mb-1.5">
+                <span className="text-xs sm:text-sm font-medium text-zinc-600 dark:text-[#a7b5be]">
                   {t.signDrawPrompt}
                 </span>
                 <button
                   type="button"
                   onClick={clearSignaturePad}
-                  className="inline-flex items-center gap-1 text-xs font-medium text-rose-600 dark:text-rose-400 hover:underline"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-md shrink-0"
                 >
                   <Eraser className="w-3.5 h-3.5" aria-hidden="true" />
                   <span>{t.signClearPad}</span>
@@ -1205,16 +1205,13 @@ export const ToolOptionsBar: React.FC<ToolOptionsBarProps> = ({
               <canvas
                 ref={canvasRef}
                 width={640}
-                height={140}
+                height={180}
                 aria-label={t.signDrawPrompt}
-                onMouseDown={startDraw}
-                onMouseMove={moveDraw}
-                onMouseUp={endDraw}
-                onMouseLeave={endDraw}
-                onTouchStart={startDraw}
-                onTouchMove={moveDraw}
-                onTouchEnd={endDraw}
-                className="w-full h-32 bg-[#fdfdfb] border-2 border-dashed border-[#c6d2cf] dark:border-[#3b4954] rounded-lg cursor-crosshair touch-none"
+                onPointerDown={startDraw}
+                onPointerMove={moveDraw}
+                onPointerUp={endDraw}
+                onPointerCancel={endDraw}
+                className="w-full h-40 sm:h-32 bg-[#fdfdfb] border-2 border-dashed border-[#c6d2cf] dark:border-[#3b4954] rounded-lg cursor-crosshair touch-none select-none"
               />
             </div>
           ) : (
@@ -1240,7 +1237,7 @@ export const ToolOptionsBar: React.FC<ToolOptionsBarProps> = ({
 
       {activeTool === 'protect' && (
         <div className="flex flex-wrap items-end gap-4">
-          <div className="flex-1 min-w-[240px] max-w-md">
+          <div className="flex-1 min-w-0 w-full sm:w-auto sm:min-w-[240px] max-w-md">
             <label
               htmlFor="protect-password"
               className="inline-flex items-center gap-2 text-sm font-semibold text-zinc-800 dark:text-[#e6edf0] mb-1.5"
@@ -1304,7 +1301,7 @@ export const ToolOptionsBar: React.FC<ToolOptionsBarProps> = ({
 
       {activeTool === 'unlock' && (
         <div className="flex flex-wrap items-end justify-between gap-4">
-          <div className="flex-1 min-w-[240px] max-w-md">
+          <div className="flex-1 min-w-0 w-full sm:w-auto sm:min-w-[240px] max-w-md">
             <label
               htmlFor="unlock-password"
               className="inline-flex items-center gap-2 text-sm font-semibold text-zinc-800 dark:text-[#e6edf0] mb-1.5"

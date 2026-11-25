@@ -66,7 +66,7 @@ export const DropZone: React.FC<DropZoneProps> = ({
           isDragging
             ? 'border-teal-600 bg-teal-50/60 dark:border-teal-400 dark:bg-teal-950/30'
             : 'border-[#c6d2cf] dark:border-[#32404a] bg-white dark:bg-[#181f24] hover:border-teal-600/60 dark:hover:border-teal-400/50'
-        } ${compact ? 'px-5 py-4' : 'px-6 py-8'}`}
+        } ${compact ? 'px-4 py-3.5 sm:px-5 sm:py-4' : 'px-4 py-6 sm:px-6 sm:py-8'}`}
       >
         <div
           className={`flex ${
@@ -89,11 +89,11 @@ export const DropZone: React.FC<DropZoneProps> = ({
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
+          <div className="flex flex-wrap items-center justify-center gap-3 w-full sm:w-auto shrink-0">
             <button
               type="button"
               onClick={() => inputRef.current?.click()}
-              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-400 dark:hover:bg-teal-300 dark:text-teal-950 rounded-lg transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5 min-h-[44px] text-sm font-semibold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-400 dark:hover:bg-teal-300 dark:text-teal-950 rounded-lg transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
             >
               <FolderOpen className="w-4 h-4" aria-hidden="true" />
               <span>{t.chooseFiles}</span>

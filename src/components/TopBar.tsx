@@ -52,25 +52,25 @@ export const TopBar: React.FC<TopBarProps> = ({
   }, [showLocalInfo]);
 
   return (
-    <header className="sticky top-0 z-30 bg-white/95 dark:bg-[#181f24]/95 backdrop-blur border-b border-[#dce3e1] dark:border-[#2c3740]">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-4 min-w-0">
+    <header className="sticky top-0 z-30 bg-white/95 dark:bg-[#181f24]/95 backdrop-blur border-b border-[#dce3e1] dark:border-[#2c3740] ps-[env(safe-area-inset-left)] pe-[env(safe-area-inset-right)]">
+      <div className="max-w-[1440px] mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4">
+        <div className="flex items-center gap-3 sm:gap-4 min-w-0">
           <a
             href="#top"
             onClick={(e) => {
               e.preventDefault();
               onSelectTool('compress');
             }}
-            className="inline-flex items-center gap-2.5 text-zinc-900 dark:text-[#f2f6f7] whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 rounded"
+            className="inline-flex items-center gap-2 sm:gap-2.5 text-zinc-900 dark:text-[#f2f6f7] whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 rounded"
           >
             <span className="w-8 h-8 rounded-md bg-teal-700 dark:bg-teal-400 text-white dark:text-teal-950 flex items-center justify-center shrink-0">
               <FileText className="w-4 h-4" aria-hidden="true" />
             </span>
             <span className="flex flex-col leading-none">
-              <span className="font-display text-lg font-bold tracking-tight">
+              <span className="font-display text-base sm:text-lg font-bold tracking-tight">
                 LargePDF
               </span>
-              <span className="text-[11px] font-medium text-zinc-500 dark:text-[#96a7b1] mt-0.5">
+              <span className="text-[10px] sm:text-[11px] font-medium text-zinc-500 dark:text-[#96a7b1] mt-0.5">
                 {t.brandBy}
               </span>
             </span>
@@ -102,7 +102,7 @@ export const TopBar: React.FC<TopBarProps> = ({
               <div
                 role="dialog"
                 aria-label={t.localProcessingTitle}
-                className="absolute top-full start-4 mt-2 w-80 p-3.5 rounded-lg bg-white dark:bg-[#1e272d] border border-[#cfd9d6] dark:border-[#32404a] shadow-lg z-40 text-start"
+                className="absolute top-full start-4 mt-2 w-80 max-w-[calc(100vw-2rem)] p-3.5 rounded-lg bg-white dark:bg-[#1e272d] border border-[#cfd9d6] dark:border-[#32404a] shadow-lg z-40 text-start"
               >
                 <div className="flex items-start justify-between gap-2 mb-1.5">
                   <p className="text-xs font-semibold text-zinc-900 dark:text-white flex items-center gap-1.5">
@@ -129,10 +129,10 @@ export const TopBar: React.FC<TopBarProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
           <label className="relative inline-flex items-center">
             <Globe
-              className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400 absolute start-2.5 pointer-events-none"
+              className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400 absolute start-2 sm:start-2.5 pointer-events-none"
               aria-hidden="true"
             />
             <select
@@ -141,7 +141,7 @@ export const TopBar: React.FC<TopBarProps> = ({
               onChange={(e) =>
                 onChangeLanguagePref(e.target.value as LanguagePreference)
               }
-              className="h-9 ps-8 pe-2.5 text-xs sm:text-sm font-medium text-zinc-800 dark:text-[#e6edf0] bg-[#f4f7f6] dark:bg-[#222b31] border border-[#cfd9d6] dark:border-[#32404a] rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+              className="h-9 ps-7 sm:ps-8 pe-1.5 sm:pe-2.5 max-w-[116px] sm:max-w-none truncate text-xs sm:text-sm font-medium text-zinc-800 dark:text-[#e6edf0] bg-[#f4f7f6] dark:bg-[#222b31] border border-[#cfd9d6] dark:border-[#32404a] rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
             >
               <option value="auto">{t.languageAutoLabel}</option>
               {SUPPORTED_LANGUAGES.map((code) => (
@@ -156,7 +156,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             type="button"
             onClick={onToggleTheme}
             aria-label={theme === 'dark' ? t.lightMode : t.darkMode}
-            className="inline-flex items-center gap-1.5 h-9 px-3 text-xs sm:text-sm font-medium text-zinc-800 dark:text-[#e6edf0] bg-[#f4f7f6] dark:bg-[#222b31] hover:bg-[#e5ecea] dark:hover:bg-[#2a353d] border border-[#cfd9d6] dark:border-[#32404a] rounded-lg transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
+            className="inline-flex items-center justify-center gap-1.5 h-9 w-9 sm:w-auto px-0 sm:px-3 text-xs sm:text-sm font-medium text-zinc-800 dark:text-[#e6edf0] bg-[#f4f7f6] dark:bg-[#222b31] hover:bg-[#e5ecea] dark:hover:bg-[#2a353d] border border-[#cfd9d6] dark:border-[#32404a] rounded-lg transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
           >
             {theme === 'dark' ? (
               <Sun className="w-4 h-4 text-amber-400 shrink-0" aria-hidden="true" />
@@ -171,10 +171,12 @@ export const TopBar: React.FC<TopBarProps> = ({
           <button
             type="button"
             onClick={onTriggerUpload}
-            className="inline-flex items-center gap-2 h-9 px-3.5 sm:px-4 text-xs sm:text-sm font-semibold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-400 dark:hover:bg-teal-300 dark:text-teal-950 rounded-lg transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#181f24]"
+            aria-label={t.chooseFiles}
+            title={t.chooseFiles}
+            className="inline-flex items-center justify-center gap-1.5 sm:gap-2 h-9 px-2.5 sm:px-4 text-xs sm:text-sm font-semibold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-400 dark:hover:bg-teal-300 dark:text-teal-950 rounded-lg transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#181f24]"
           >
             <FolderOpen className="w-4 h-4 shrink-0" aria-hidden="true" />
-            <span>{t.chooseFiles}</span>
+            <span className="hidden min-[430px]:inline">{t.chooseFiles}</span>
           </button>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Minimize2,
   Layers,
@@ -23,7 +23,9 @@ import {
   Tags,
   ChevronDown,
   Gauge,
+  LayoutGrid,
   ShieldCheck,
+  X,
 } from 'lucide-react';
 import type { ToolId } from '../types/pdf';
 import type { TranslationDict } from '../i18n/translations';
@@ -214,42 +216,151 @@ export const ToolSidebar: React.FC<ToolSidebarProps> = ({
   t,
 }) => {
   const [showSpeed, setShowSpeed] = useState(false);
+  const [showMobileDrawer, setShowMobileDrawer] = useState(false);
+  const mobileTabRefs = useRef<Partial<Record<ToolId, HTMLButtonElement | null>>>({});
+
+  useEffect(() => {
+    const activeBtn = mobileTabRefs.current[activeTool];
+    if (activeBtn && typeof activeBtn.scrollIntoView === 'function') {
+      activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  }, [activeTool]);
 
   return (
     <>
-      {/* Mobile / Tablet single tool picker bar */}
-      <div className="lg:hidden border-b border-[#dce3e1] dark:border-[#2c3740] bg-white dark:bg-[#181f24] px-4 py-2.5 overflow-x-auto">
-        <div
-          className="flex items-center gap-2 min-w-max"
-          role="tablist"
-          aria-label={t.step1PickTask}
-        >
-          {ALL_TOOL_ORDER.map((toolId) => {
-            const Icon = TOOL_ICONS[toolId];
-            const tint = TOOL_TINTS[toolId];
-            const active = activeTool === toolId;
-            return (
-              <button
-                key={toolId}
-                type="button"
-                role="tab"
-                aria-selected={active}
-                onClick={() => onSelectTool(toolId)}
-                className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${
-                  active
-                    ? 'bg-teal-700 dark:bg-teal-400 text-white dark:text-teal-950 font-semibold'
-                    : 'bg-[#eef2f1] dark:bg-[#222b31] text-zinc-700 dark:text-[#d6e0e5] hover:bg-[#e2e9e7] dark:hover:bg-[#2a353d]'
-                }`}
-              >
-                <Icon
-                  className={`w-4 h-4 shrink-0 ${active ? '' : tint.text}`}
-                  aria-hidden="true"
-                />
-                <span>{t.tools[toolId].label}</span>
-              </button>
-            );
-          })}
+      {/* Mobile / Tablet quick bar + expandable All 21 Tools drawer */}
+      <div className="lg:hidden border-b border-[#dce3e1] dark:border-[#2c3740] bg-white dark:bg-[#181f24]">
+        <div className="flex items-center gap-2 px-3 py-2">
+          <button
+            type="button"
+            aria-expanded={showMobileDrawer}
+            onClick={() => setShowMobileDrawer((v) => !v)}
+            className={`inline-flex items-center gap-1.5 px-3 min-h-[40px] rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap shrink-0 border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${
+              showMobileDrawer
+                ? 'bg-teal-700 dark:bg-teal-400 text-white dark:text-teal-950 border-teal-700 dark:border-teal-400'
+                : 'bg-[#f4f7f6] dark:bg-[#222b31] text-zinc-800 dark:text-[#e6edf0] border-[#cfd9d6] dark:border-[#32404a]'
+            }`}
+          >
+            {showMobileDrawer ? (
+              <X className="w-4 h-4 shrink-0" aria-hidden="true" />
+            ) : (
+              <LayoutGrid className="w-4 h-4 text-teal-600 dark:text-teal-400 shrink-0" aria-hidden="true" />
+            )}
+            <span>{t.navAllTools}</span>
+          </button>
+
+          <div
+            className="flex-1 min-w-0 overflow-x-auto no-scrollbar"
+            role="tablist"
+            aria-label={t.step1PickTask}
+          >
+            <div className="flex items-center gap-1.5 min-w-max pe-1">
+              {ALL_TOOL_ORDER.map((toolId) => {
+                const Icon = TOOL_ICONS[toolId];
+                const tint = TOOL_TINTS[toolId];
+                const active = activeTool === toolId;
+                return (
+                  <button
+                    key={toolId}
+                    ref={(el) => {
+                      mobileTabRefs.current[toolId] = el;
+                    }}
+                    type="button"
+                    role="tab"
+                    aria-selected={active}
+                    onClick={() => {
+                      onSelectTool(toolId);
+                      setShowMobileDrawer(false);
+                    }}
+                    className={`inline-flex items-center gap-1.5 px-3 min-h-[40px] rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${
+                      active
+                        ? 'bg-teal-700 dark:bg-teal-400 text-white dark:text-teal-950 font-semibold'
+                        : 'bg-[#eef2f1] dark:bg-[#222b31] text-zinc-700 dark:text-[#d6e0e5] hover:bg-[#e2e9e7] dark:hover:bg-[#2a353d]'
+                    }`}
+                  >
+                    <Icon
+                      className={`w-4 h-4 shrink-0 ${active ? '' : tint.text}`}
+                      aria-hidden="true"
+                    />
+                    <span>{t.tools[toolId].label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
+
+        {showMobileDrawer && (
+          <nav
+            aria-label={t.navAllTools}
+            className="px-3 pb-4 pt-2 border-t border-[#eef2f1] dark:border-[#242e35] bg-[#f8faf9] dark:bg-[#141a1e] space-y-4 max-h-[70dvh] overflow-y-auto"
+          >
+            {TOOL_GROUPS.map((group) => (
+              <div key={group.groupKey} className="space-y-1.5">
+                <p className="px-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-[#96a7b1]">
+                  {t.groups[group.groupKey]}
+                </p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {group.tools.map((toolId) => {
+                    const Icon = TOOL_ICONS[toolId];
+                    const tint = TOOL_TINTS[toolId];
+                    const active = activeTool === toolId;
+                    return (
+                      <button
+                        key={toolId}
+                        type="button"
+                        onClick={() => {
+                          onSelectTool(toolId);
+                          setShowMobileDrawer(false);
+                        }}
+                        className={`text-start flex items-center gap-2 px-2.5 py-2.5 min-h-[44px] rounded-lg border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${
+                          active
+                            ? 'bg-[#edf7f5] dark:bg-[#222b31] text-zinc-950 dark:text-white border-teal-600/60 dark:border-teal-400/60 font-semibold'
+                            : 'bg-white dark:bg-[#181f24] text-zinc-700 dark:text-[#d6e0e5] border-[#dce3e1] dark:border-[#2c3740] font-medium'
+                        }`}
+                      >
+                        <span
+                          className={`w-7 h-7 rounded-md flex items-center justify-center shrink-0 ${
+                            active ? tint.activeBadge : tint.badge
+                          }`}
+                        >
+                          <Icon className="w-3.5 h-3.5" aria-hidden="true" />
+                        </span>
+                        <span className="text-xs sm:text-sm leading-tight line-clamp-2">
+                          {t.tools[toolId].label}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+
+            <div className="pt-3 border-t border-[#dce3e1] dark:border-[#2c3740] flex flex-wrap items-center justify-between gap-2">
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-600 dark:text-[#a7b5be]">
+                <Gauge className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" aria-hidden="true" />
+                <span>{t.batchSpeedLabel(concurrency)}</span>
+              </span>
+              <div className="inline-flex items-center gap-1 p-1 bg-[#e5ecea] dark:bg-[#222b31] rounded-lg">
+                {[1, 2, 3, 4].map((n) => (
+                  <button
+                    key={n}
+                    type="button"
+                    onClick={() => onChangeConcurrency(n)}
+                    aria-label={`${n}x`}
+                    className={`px-3 py-1.5 text-xs font-mono tabular-nums font-medium rounded-md transition-colors ${
+                      concurrency === n
+                        ? 'bg-white dark:bg-[#313e47] text-zinc-950 dark:text-white shadow-xs font-semibold'
+                        : 'text-zinc-600 dark:text-[#96a7b1]'
+                    }`}
+                  >
+                    {n}x
+                  </button>
+                ))}
+              </div>
+            </div>
+          </nav>
+        )}
       </div>
 
       {/* Desktop single left workspace tool rail */}

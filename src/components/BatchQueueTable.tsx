@@ -128,50 +128,52 @@ export const BatchQueueTable: React.FC<BatchQueueTableProps> = ({
       className="bg-white dark:bg-[#181f24] border border-[#dce3e1] dark:border-[#2c3740] rounded-lg overflow-hidden"
     >
       {/* Queue Toolbar */}
-      <div className="px-4 py-3 border-b border-[#dce3e1] dark:border-[#2c3740] flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="inline-flex items-center gap-1 p-1 bg-[#eef2f1] dark:bg-[#222b31] rounded-lg">
-            {(
-              [
-                { id: 'all', label: t.filterAll(items.length), icon: Layers },
-                { id: 'queued', label: t.filterReady(summary.queuedCount), icon: Clock },
-                { id: 'done', label: t.filterDone(summary.doneCount), icon: CheckCircle2 },
-                ...(summary.errorCount > 0
-                  ? [
-                      {
-                        id: 'error' as const,
-                        label: t.filterSkipped(summary.errorCount),
-                        icon: AlertCircle,
-                      },
-                    ]
-                  : []),
-              ] as {
-                id: StatusFilter;
-                label: string;
-                icon: React.ComponentType<{ className?: string }>;
-              }[]
-            ).map((tab) => {
-              const TabIcon = tab.icon;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setFilter(tab.id)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition-colors whitespace-nowrap shrink-0 ${
-                    filter === tab.id
-                      ? 'bg-white dark:bg-[#313e47] text-zinc-950 dark:text-white shadow-xs font-semibold'
-                      : 'text-zinc-600 dark:text-[#a7b5be] hover:text-zinc-950 dark:hover:text-white'
-                  }`}
-                >
-                  <TabIcon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
+      <div className="px-3.5 sm:px-4 py-3 border-b border-[#dce3e1] dark:border-[#2c3740] flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 min-w-0 w-full sm:w-auto">
+          <div className="max-w-full overflow-x-auto no-scrollbar">
+            <div className="inline-flex items-center gap-1 p-1 bg-[#eef2f1] dark:bg-[#222b31] rounded-lg min-w-max">
+              {(
+                [
+                  { id: 'all', label: t.filterAll(items.length), icon: Layers },
+                  { id: 'queued', label: t.filterReady(summary.queuedCount), icon: Clock },
+                  { id: 'done', label: t.filterDone(summary.doneCount), icon: CheckCircle2 },
+                  ...(summary.errorCount > 0
+                    ? [
+                        {
+                          id: 'error' as const,
+                          label: t.filterSkipped(summary.errorCount),
+                          icon: AlertCircle,
+                        },
+                      ]
+                    : []),
+                ] as {
+                  id: StatusFilter;
+                  label: string;
+                  icon: React.ComponentType<{ className?: string }>;
+                }[]
+              ).map((tab) => {
+                const TabIcon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setFilter(tab.id)}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition-colors whitespace-nowrap shrink-0 ${
+                      filter === tab.id
+                        ? 'bg-white dark:bg-[#313e47] text-zinc-950 dark:text-white shadow-xs font-semibold'
+                        : 'text-zinc-600 dark:text-[#a7b5be] hover:text-zinc-950 dark:hover:text-white'
+                    }`}
+                  >
+                    <TabIcon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {items.length > 4 && (
-            <div className="relative">
+            <div className="relative w-full sm:w-auto">
               <Search
                 className="w-4 h-4 text-zinc-400 absolute start-3 top-1/2 -translate-y-1/2 pointer-events-none"
                 aria-hidden="true"
@@ -182,7 +184,7 @@ export const BatchQueueTable: React.FC<BatchQueueTableProps> = ({
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder={t.findFilePlaceholder}
-                className="h-9 ps-9 pe-3 text-sm bg-[#f8faf9] dark:bg-[#222b31] border border-[#cfd9d6] dark:border-[#32404a] rounded-lg text-zinc-900 dark:text-[#f2f6f7] placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-teal-500 w-44"
+                className="h-10 sm:h-9 ps-9 pe-3 text-sm bg-[#f8faf9] dark:bg-[#222b31] border border-[#cfd9d6] dark:border-[#32404a] rounded-lg text-zinc-900 dark:text-[#f2f6f7] placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-teal-500 w-full sm:w-44"
               />
             </div>
           )}
@@ -269,11 +271,11 @@ export const BatchQueueTable: React.FC<BatchQueueTableProps> = ({
                 )}
               </div>
 
-              <div className="flex items-center justify-end gap-2">
+              <div className="flex flex-wrap items-center justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => onPreviewItem(item)}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-zinc-800 dark:text-[#e6edf0] bg-[#eef2f1] dark:bg-[#222b31] hover:bg-[#e2e9e7] dark:hover:bg-[#2a353d] rounded-lg"
+                  className="inline-flex items-center justify-center gap-1.5 px-3.5 min-h-[40px] text-xs font-semibold text-zinc-800 dark:text-[#e6edf0] bg-[#eef2f1] dark:bg-[#222b31] hover:bg-[#e2e9e7] dark:hover:bg-[#2a353d] rounded-lg"
                 >
                   <Eye className="w-3.5 h-3.5" aria-hidden="true" />
                   <span>{t.btnView}</span>
@@ -283,7 +285,7 @@ export const BatchQueueTable: React.FC<BatchQueueTableProps> = ({
                     <button
                       type="button"
                       onClick={() => onDownloadItem(item)}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-400 dark:hover:bg-teal-300 dark:text-teal-950 rounded-lg"
+                      className="inline-flex items-center justify-center gap-1.5 px-3.5 min-h-[40px] text-xs font-semibold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-400 dark:hover:bg-teal-300 dark:text-teal-950 rounded-lg"
                     >
                       <Download className="w-3.5 h-3.5" aria-hidden="true" />
                       <span>{t.btnSaveFile}</span>
@@ -298,7 +300,7 @@ export const BatchQueueTable: React.FC<BatchQueueTableProps> = ({
                           type="button"
                           onClick={() => onChainToTool(effectiveChainTarget, item)}
                           aria-label={`${t.sendToNextTool}: ${t.tools[effectiveChainTarget].label} (${item.name})`}
-                          className="inline-flex items-center gap-1 px-2.5 py-2 text-xs font-semibold text-teal-800 dark:text-teal-200 bg-teal-50 dark:bg-teal-950/50 border border-teal-200 dark:border-teal-800 rounded-lg"
+                          className="inline-flex items-center justify-center gap-1 px-3 min-h-[40px] text-xs font-semibold text-teal-800 dark:text-teal-200 bg-teal-50 dark:bg-teal-950/50 border border-teal-200 dark:border-teal-800 rounded-lg"
                         >
                           <ArrowRightCircle className="w-3.5 h-3.5" aria-hidden="true" />
                           <span>{t.sendToNextTool}</span>
@@ -311,7 +313,7 @@ export const BatchQueueTable: React.FC<BatchQueueTableProps> = ({
                   onClick={() => onRemoveItem(item.id)}
                   disabled={isProcessing}
                   aria-label={`Remove ${item.name}`}
-                  className="p-2 text-zinc-400 hover:text-rose-600 dark:hover:text-rose-400 rounded-lg disabled:opacity-40"
+                  className="inline-flex items-center justify-center min-w-[40px] min-h-[40px] p-2 text-zinc-400 hover:text-rose-600 dark:hover:text-rose-400 rounded-lg disabled:opacity-40"
                 >
                   <Trash2 className="w-4 h-4" aria-hidden="true" />
                 </button>
@@ -509,18 +511,18 @@ export const BatchQueueTable: React.FC<BatchQueueTableProps> = ({
 
       {/* Workflow Chaining Bar (after at least 1 finished PDF/image output exists) */}
       {(summary.doneCount > 0 || mergedArtifact !== null) && (
-        <div className="px-4 py-3 bg-[#edf7f5]/70 dark:bg-[#162328] border-t border-[#dce3e1] dark:border-[#2c3740] flex flex-wrap items-center justify-between gap-3">
+        <div className="px-3.5 sm:px-4 py-3 bg-[#edf7f5]/70 dark:bg-[#162328] border-t border-[#dce3e1] dark:border-[#2c3740] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3">
           <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-teal-900 dark:text-teal-200">
             <ArrowRightCircle className="w-4 h-4 text-teal-700 dark:text-teal-400 shrink-0" aria-hidden="true" />
             <span>{t.sendResultsToNext}</span>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex items-center gap-2 w-full sm:w-auto">
             <select
               aria-label={t.sendResultsToNext}
               value={effectiveChainTarget}
               onChange={(e) => setChainTarget(e.target.value as ToolId)}
-              className="h-9 px-3 text-xs sm:text-sm font-medium bg-white dark:bg-[#222b31] border border-[#cfd9d6] dark:border-[#32404a] rounded-lg text-zinc-900 dark:text-[#f2f6f7] focus:outline-none focus:ring-2 focus:ring-teal-500"
+              className="flex-1 sm:flex-initial min-w-0 h-10 sm:h-9 px-3 text-xs sm:text-sm font-medium bg-white dark:bg-[#222b31] border border-[#cfd9d6] dark:border-[#32404a] rounded-lg text-zinc-900 dark:text-[#f2f6f7] focus:outline-none focus:ring-2 focus:ring-teal-500"
             >
               {chainOptions.map((toolId) => (
                 <option key={toolId} value={toolId}>
@@ -533,7 +535,7 @@ export const BatchQueueTable: React.FC<BatchQueueTableProps> = ({
               type="button"
               disabled={isProcessing}
               onClick={() => onChainToTool(effectiveChainTarget)}
-              className="inline-flex items-center gap-1.5 h-9 px-3.5 text-xs sm:text-sm font-semibold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-400 dark:hover:bg-teal-300 dark:text-teal-950 rounded-lg transition-colors whitespace-nowrap shrink-0 disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-1.5 h-10 sm:h-9 px-4 sm:px-3.5 text-xs sm:text-sm font-semibold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-400 dark:hover:bg-teal-300 dark:text-teal-950 rounded-lg transition-colors whitespace-nowrap shrink-0 disabled:opacity-50"
             >
               <span>{t.chainGo}</span>
             </button>
@@ -542,8 +544,8 @@ export const BatchQueueTable: React.FC<BatchQueueTableProps> = ({
       )}
 
       {/* Batch Summary & Primary Action Footer */}
-      <div className="px-4 py-4 bg-[#f8faf9] dark:bg-[#151b20] border-t border-[#dce3e1] dark:border-[#2c3740] flex flex-wrap items-center justify-between gap-4">
-        <div className="text-sm text-zinc-600 dark:text-[#a7b5be] flex flex-wrap items-center gap-2">
+      <div className="px-3.5 sm:px-4 py-4 bg-[#f8faf9] dark:bg-[#151b20] border-t border-[#dce3e1] dark:border-[#2c3740] flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 sm:gap-4">
+        <div className="text-xs sm:text-sm text-zinc-600 dark:text-[#a7b5be] flex flex-wrap items-center gap-x-2 gap-y-1">
           <span className="font-mono tabular-nums font-semibold text-zinc-900 dark:text-white">
             {t.totalFilesLabel(summary.totalFiles)}
           </span>
@@ -569,15 +571,15 @@ export const BatchQueueTable: React.FC<BatchQueueTableProps> = ({
           )}
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
           {mergedArtifact && activeTool === 'merge' && (
             <button
               type="button"
               onClick={onDownloadMerged}
-              className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-emerald-950 bg-emerald-400 hover:bg-emerald-300 rounded-lg transition-colors whitespace-nowrap shrink-0"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[44px] w-full sm:w-auto text-sm font-semibold text-emerald-950 bg-emerald-400 hover:bg-emerald-300 rounded-lg transition-colors"
             >
-              <Download className="w-4 h-4" aria-hidden="true" />
-              <span>
+              <Download className="w-4 h-4 shrink-0" aria-hidden="true" />
+              <span className="truncate">
                 {t.btnSave} {mergedArtifact.filename} ({formatBytes(mergedArtifact.size)})
               </span>
             </button>
@@ -587,9 +589,9 @@ export const BatchQueueTable: React.FC<BatchQueueTableProps> = ({
             <button
               type="button"
               onClick={onDownloadAllZip}
-              className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-zinc-800 dark:text-[#e6edf0] bg-white dark:bg-[#222b31] border border-[#cfd9d6] dark:border-[#32404a] hover:bg-[#eef2f1] dark:hover:bg-[#2a353d] rounded-lg transition-colors whitespace-nowrap shrink-0"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[44px] w-full sm:w-auto text-sm font-semibold text-zinc-800 dark:text-[#e6edf0] bg-white dark:bg-[#222b31] border border-[#cfd9d6] dark:border-[#32404a] hover:bg-[#eef2f1] dark:hover:bg-[#2a353d] rounded-lg transition-colors whitespace-nowrap shrink-0"
             >
-              <Archive className="w-4 h-4 text-amber-600 dark:text-amber-400" aria-hidden="true" />
+              <Archive className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" aria-hidden="true" />
               <span>{t.downloadAllZip}</span>
             </button>
           )}
@@ -598,7 +600,7 @@ export const BatchQueueTable: React.FC<BatchQueueTableProps> = ({
             type="button"
             onClick={onRunBatch}
             disabled={isProcessing || items.length === 0}
-            className="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-400 dark:hover:bg-teal-300 dark:text-teal-950 rounded-lg transition-colors whitespace-nowrap shrink-0 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#151b20]"
+            className="inline-flex items-center justify-center gap-2 px-6 py-2.5 min-h-[44px] w-full sm:w-auto text-sm font-semibold text-white bg-teal-700 hover:bg-teal-800 dark:bg-teal-400 dark:hover:bg-teal-300 dark:text-teal-950 rounded-lg transition-colors whitespace-nowrap shrink-0 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#151b20]"
           >
             {isProcessing ? (
               <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
